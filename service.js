@@ -56,12 +56,12 @@ class Service {
     //         var input = source
             
             
-    //         input = input.replacingOccurrences(of: "--", with: "+")
-    //         input = input.replacingOccurrences(of: "+", with: " ")
-    //         input = input.replacingOccurrences(of: "/", with: " / ")
-    //         input = input.replacingOccurrences(of: "-", with: " -")
-    //         input = input.replacingOccurrences(of: "*", with: " * ")
-    //         input = input.replacingOccurrences(of: "^", with: " ^ ")
+    //         input = input.replaceAll(of: "--", with: "+")
+    //         input = input.replaceAll(of: "+", with: " ")
+    //         input = input.replaceAll(of: "/", with: " / ")
+    //         input = input.replaceAll(of: "-", with: " -")
+    //         input = input.replaceAll(of: "*", with: " * ")
+    //         input = input.replaceAll(of: "^", with: " ^ ")
             
             
             
@@ -205,301 +205,150 @@ class Service {
     
     
     
-    // SCIENTIFIC_OPERATION(source:String)->(String){
+    scientific_operation(source){
+        var resultvalue = new Decimal("0.0");
+        var input = source;//sin60,sqrt4,log
         
-    //     var resultvalue = new Decimal(string: "0.0")
-    //     var input = source//sin60,sqrt4,log
+        input = input.replaceAll("--", "+");
+        input = input.replaceAll("+", " +");
+        input = input.replaceAll("-", " -");
+        input = input.replaceAll("/", " /");
+        input = input.replaceAll("*", " *");
+        input = input.replaceAll("^", " ^ ");
+        input = input.replaceAll("sin", " sin");
+        input = input.replaceAll("log", " log");
+        input = input.replaceAll("cos", " cos");
+        input = input.replaceAll("tan", " tan");
+        input = input.replaceAll("sqr", " sqr");
+        input = input.replaceAll("sin -", "sin-");
+        input = input.replaceAll("cos -", "cos-");
+        input = input.replaceAll("tan -", "tan-");
+        input = input.replaceAll("a sin", "asin");
+        input = input.replaceAll("a cos", "acos");
+        input = input.replaceAll("a tan", "atan");
+        input = input.replaceAll("(", " ( ");
+        input = input.replaceAll(")", " ) ");
         
-    //     input = input.replacingOccurrences(of: "--", with: "+")
-    //     input = input.replacingOccurrences(of: "+", with: " +")
-    //     input = input.replacingOccurrences(of: "-", with: " -")
-        
-    //     input = input.replacingOccurrences(of: "/", with: " /")
-        
-    //     input = input.replacingOccurrences(of: "*", with: " *")
-        
-        
-    //     input = input.replacingOccurrences(of: "^", with: " ^ ")
-        
-        
-        
-        
-    //     input = input.replacingOccurrences(of: "sin", with: " sin")
-    //     input = input.replacingOccurrences(of: "log", with: " log")
-    //     input = input.replacingOccurrences(of: "cos", with: " cos")
-    //     input = input.replacingOccurrences(of: "tan", with: " tan")
-    //     input = input.replacingOccurrences(of: "sqr", with: " sqr")
-    //     input = input.replacingOccurrences(of: "sin -", with: "sin-")
-    //     input = input.replacingOccurrences(of: "cos -", with: "cos-")
-    //     input = input.replacingOccurrences(of: "tan -", with: "tan-")
-    //     input = input.replacingOccurrences(of: "a sin", with: "asin")
-    //     input = input.replacingOccurrences(of: "a cos", with: "acos")
-    //     input = input.replacingOccurrences(of: "a tan", with: "atan")
-        
-        
-        
-    //     input = input.replacingOccurrences(of: "(", with: " ( ")
-    //     input = input.replacingOccurrences(of: ")", with: " ) ")
-        
-        
-        
-        
-    //     var elements : [String] = input.split{$0 == " "}.map(String.init)
-        
-    //     //(elements)
-        
-        
-    //     for i in 0..<elements.count {
+        let elements = input.split(' ');
+        elements = elements.filter(item => item !== "");
+    
+        //(elements)
+        for (let i = 0; i < elements.length; i++) {
+            if (elements[i].includes("asin")) {
+                if (this.isFloat(elements[i].replaceAll("asin", ""))){
+                    elements[i] = elements[i].replaceAll("asin", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.asin(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
             
-    //         if elements[i].contains("asin") {
-                
-    //             if Double(elements[i].replacingOccurrences(of: "asin", with: "")) == nil{
-                    
-                    
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "asin", with: "")
-                    
-                    
-    //                 //http://stackoverflow.com/questions/39890795/decimal-to-double-conversion-in-swift-3
-    //                 resultvalue = new Decimal(value:asin(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-                    
-    //             }
-                
-    //         }
+            if (elements[i].includes("acos")) {
+                if (this.isFloat(elements[i].replaceAll("acos", ""))){
+                    elements[i] = elements[i].replaceAll("acos", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.acos(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
             
-    //         if elements[i].contains("acos") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "acos", with: "")) == nil{
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "acos", with: "")
-                    
-    //                 //http://stackoverflow.com/questions/39890795/decimal-to-double-conversion-in-swift-3
-    //                 resultvalue = new Decimal(value:acos(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
+            if (elements[i].includes("atan")) {
+                if (this.isFloat(elements[i].replaceAll("atan", ""))){
+                    elements[i] = elements[i].replaceAll("atan", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.atan(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
             
-    //         if elements[i].contains("atan") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "atan", with: "")) == nil{
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "atan", with: "")
-                    
-                    
-    //                 //http://stackoverflow.com/questions/39890795/decimal-to-double-conversion-in-swift-3
-    //                 resultvalue = new Decimal(value:atan(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
+            if (elements[i].includes("sin")) {
+                if (this.isFloat(elements[i].replaceAll("sin", ""))){
+                    elements[i] = elements[i].replaceAll("sin", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.sin(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
+           
+            if (elements[i].includes("cos")) {
+                if (this.isFloat(elements[i].replaceAll("cos", ""))){
+                    elements[i] = elements[i].replaceAll("cos", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.cos(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
             
-    //         if elements[i].contains("sin") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "sin", with: "")) == nil{
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "sin", with: "")
-                    
-    //                 //http://stackoverflow.com/questions/39890795/decimal-to-double-conversion-in-swift-3
-    //                 resultvalue = new Decimal(value:sin(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
+            if (elements[i].includes("tan")) {
+                if (this.isFloat(elements[i].replaceAll("tan", ""))){
+                    elements[i] = elements[i].replaceAll("tan", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.tan(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
+               
+            if (elements[i].includes("sqrt")) {
+                if (this.isFloat(elements[i].replaceAll("sqrt", ""))){
+                    elements[i] = elements[i].replaceAll("sqrt", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.sqrt(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
             
-    //         if elements[i].contains("cos") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "cos", with: "")) == nil{
-                    
-    //                 //("cosnil")
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "cos", with: "")
-                    
-                    
-    //                 //http://stackoverflow.com/questions/39890795/decimal-to-double-conversion-in-swift-3
-    //                 resultvalue = new Decimal(value:cos(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
+            //http://swift.tecc0.com/?p=105
+            if (elements[i].includes("abs")) {
+                if (this.isFloat(elements[i].replaceAll("abs", ""))){
+                    elements[i] = elements[i].replaceAll("abs", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.abs(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
             
-    //         if elements[i].contains("tan") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "tan", with: "")) == nil{
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "tan", with: "")
-                    
-                    
-    //                 //http://stackoverflow.com/questions/39890795/decimal-to-double-conversion-in-swift-3
-    //                 resultvalue = new Decimal(value:tan(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
+            if (elements[i].includes("exp")) {
+                if (this.isFloat(elements[i].replaceAll("exp", ""))){
+                    elements[i] = elements[i].replaceAll("exp", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.exp(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
             
+            if (elements[i].includes("logb")) {
+                if (this.isFloat(elements[i].replaceAll("logb", ""))){
+                    elements[i] = elements[i].replaceAll("logb", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.log2(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
             
+            if (elements[i].includes("logd")) {
+                if (this.isFloat(elements[i].replaceAll("logd", ""))){
+                    elements[i] = elements[i].replaceAll("logd", "");
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.log10(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
             
-    //         //
-    //         if elements[i].contains("sqrt") {
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "sqrt", with: "")
-    //                 ) == nil{
-                    
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "sqrt", with: "")
-                    
-                    
-    //                 //http://stackoverflow.com/questions/39890795/decimal-to-double-conversion-in-swift-3
-    //                 resultvalue = new Decimal(value:sqrt(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
-            
-            
-    //         //http://swift.tecc0.com/?p=105
-    //         if elements[i].contains("abs") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "abs", with: "")) == nil{
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "abs", with: "")
-                    
-    //                 resultvalue = new Decimal(value:fabs(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
-            
-            
-            
-    //         if elements[i].contains("expb") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "expb", with: "")) == nil{
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "expb", with: "")
-                    
-    //                 resultvalue = new Decimal(value:exp2(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
-            
-    //         if elements[i].contains("exp") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "exp", with: "")) == nil{
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "exp", with: "")
-                    
-    //                 resultvalue = new Decimal(value:exp(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
-            
-    //         if elements[i].contains("logb") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "logb", with: "")) == nil{
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "logb", with: "")
-                    
-    //                 resultvalue = new Decimal(value:log2(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
-            
-            
-    //         if elements[i].contains("logd") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "logd", with: "")) == nil{
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "logd", with: "")
-                    
-    //                 resultvalue = new Decimal(value:log10(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
-            
-            
-    //         if elements[i].contains("log") {
-                
-                
-                
-    //             if Double(elements[i].replacingOccurrences(of: "log", with: "")) == nil{
-                    
-    //             }else{
-                    
-    //                 elements[i] = elements[i].replacingOccurrences(of: "log", with: "")
-                    
-    //                 resultvalue = new Decimal(value:log(Double(elements[i])!))
-                    
-    //                 elements[i] = String(describing: resultvalue)
-    //             }
-    //         }
-            
-            
-            
-    //     }
+            if (elements[i].includes("log")) {
+                if (this.isFloat(elements[i].replaceAll("log", ""))){
+                    elements[i] = elements[i].replaceAll('log', '');
+                    let arg = new Decimal(elements[i]);
+                    resultvalue = new Decimal(Math.log(arg));
+                    elements[i] = resultvalue.toString();
+                }
+            }
+        }
         
-    //     //("elements")
-    //     //(elements)
-        
-    //     let resultstr = elements.joined(separator: "")
-        
-    //     return resultstr
-        
-    // }
+        return elements.join('');
+    }
     
     isFloat(str) {
-        return /^\d+(\.\d+)?$/.test(str);
+        return /^-?\d+(\.\d+)?$/.test(str);
     }  
 
     basic_operation(source){
@@ -537,7 +386,7 @@ class Service {
             if (elements[i] == "*" && typeof elements[i-1] !== "undefined" && this.isFloat(elements[i-1]) && typeof elements[i+1] !== "undefined" && this.isFloat(elements[i+1])) {
                 let a = new Decimal(elements[i-1])
                 let b = new Decimal(elements[i+1])
-                resultvalue = a * b; 
+                resultvalue = a.times(b); 
                 elements[i+1] = resultvalue.toString();
                 elements[i-1] = "nil";
                 elements[i] = "nil";
@@ -552,7 +401,7 @@ class Service {
                     elements[i+1] = "nil";
                 }
                 else{
-                    resultvalue = a / b;
+                    resultvalue = a.dividedBy(b);
                     elements[i+1] = resultvalue.toString();
                     elements[i-1] = "nil";
                     elements[i] = "nil";
@@ -570,7 +419,7 @@ class Service {
                 if (this.isFloat(elements[i-1]) && this.isFloat(elements[i])){
                     let a = new Decimal(elements[i-1]);
                     let b = new Decimal(elements[i]);
-                    resultvalue = a + b;
+                    let resultvalue = a.plus(b);
                     elements[i] = resultvalue.toString();
                     elements[i-1] = "nil";
                 }

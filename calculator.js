@@ -7,8 +7,9 @@ console.log(Math.PI);
 
 const test = new Decimal(0.1);
 console.log(test);
-
-console.log(service.basic_operation('0.1 ^ 0.2'));
+let str = '0.1 ^ 0.2 + sin60';
+str = service.scientific_operation(str);
+console.log(service.basic_operation(str));
 
 }
 
