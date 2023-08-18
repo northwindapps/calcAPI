@@ -1,4 +1,4 @@
-const {Service} = require('./Service');
+const {Service} = require('./service');
 const Decimal = require('decimal.js');
 const service = new Service();
 
@@ -18,6 +18,7 @@ console.log(service.basic_operation(str));
 
 let str = '0.1 ^ 0.2 + sin60';
 str = 'logd(10*10)+(sqrt(sqrt4 + 2 * (sin60^2 + cos60^2)))*2';
+str = '(cos45 * sin45)';
 // str = 'sqrt(2)';
 let result = excecute(str);
 console.log(result);
@@ -117,10 +118,3 @@ function excecute(expression) {
         return false;
     }
 }
-
-
-// class Calculator{ 
-// }
-// module.exports = {
-//     Calculator,
-// };

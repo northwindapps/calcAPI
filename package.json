@@ -1,5 +1,25 @@
 {
   "dependencies": {
     "decimal.js": "^10.4.3"
+  },
+  "name": "calcapi",
+  "version": "1.0.0",
+  "main": "calculator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/northwindapps/calcAPI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/northwindapps/calcAPI/issues"
+  },
+  "homepage": "https://github.com/northwindapps/calcAPI#readme",
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.6.2"
   }
 }

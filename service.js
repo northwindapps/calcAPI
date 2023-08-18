@@ -80,7 +80,8 @@ class Service {
                     if (this.isFloat(elements[i].replaceAll("asin", ""))){
                         let exp = elements[i].replaceAll("asin", "");
                         let arg = new Decimal(exp);
-                        let resultvalue = new Decimal(Math.asin(arg));
+                        let radian = new Decimal(this.degreesToRadians(arg));
+                        let resultvalue = new Decimal(Math.asin(radian));
                         input = input.replaceAll(elements[i], resultvalue.toString());
                     }
                 }
@@ -88,7 +89,8 @@ class Service {
                     if (this.isFloat(elements[i].replaceAll("acos", ""))){
                         let exp = elements[i].replaceAll("acos", "");
                         let arg = new Decimal(exp);
-                        let resultvalue = new Decimal(Math.acos(arg));
+                        let radian = new Decimal(this.degreesToRadians(arg));
+                        let resultvalue = new Decimal(Math.acos(radian));
                         input = input.replaceAll(elements[i], resultvalue.toString());
                     }
                 }
@@ -96,7 +98,8 @@ class Service {
                     if (this.isFloat(elements[i].replaceAll("atan", ""))){
                         let exp = elements[i].replaceAll("atan", "");
                         let arg = new Decimal(exp);
-                        let resultvalue = new Decimal(Math.atan(arg));
+                        let radian = new Decimal(this.degreesToRadians(arg));
+                        let resultvalue = new Decimal(Math.atan(radian));
                         input = input.replaceAll(elements[i], resultvalue.toString());
                     }
                 }
@@ -104,7 +107,8 @@ class Service {
                     if (this.isFloat(elements[i].replaceAll("sin", ""))){
                         let exp = elements[i].replaceAll("sin", "");
                         let arg = new Decimal(exp);
-                        let resultvalue = new Decimal(Math.sin(arg));
+                        let radian = new Decimal(this.degreesToRadians(arg));
+                        let resultvalue = new Decimal(Math.sin(radian));
                         input = input.replaceAll(elements[i], resultvalue.toString());
                     }
                 }
@@ -112,7 +116,8 @@ class Service {
                     if (this.isFloat(elements[i].replaceAll("cos", ""))){
                         let exp = elements[i].replaceAll("cos", "");
                         let arg = new Decimal(exp);
-                        let resultvalue = new Decimal(Math.cos(arg));
+                        let radian = new Decimal(this.degreesToRadians(arg));
+                        let resultvalue = new Decimal(Math.cos(radian));
                         input = input.replaceAll(elements[i], resultvalue.toString());
                     }
                 }
@@ -120,7 +125,8 @@ class Service {
                     if (this.isFloat(elements[i].replaceAll("tan", ""))){
                         let exp = elements[i].replaceAll("tan", "");
                         let arg = new Decimal(exp);
-                        let resultvalue = new Decimal(Math.tan(arg));
+                        let radian = new Decimal(this.degreesToRadians(arg));
+                        let resultvalue = new Decimal(Math.tan(radian));
                         input = input.replaceAll(elements[i], resultvalue.toString());
                     }
                 }   
@@ -188,6 +194,10 @@ class Service {
     containsAlphabetChars(str) {
         return /[a-zA-Z]/.test(str);
     }
+
+    degreesToRadians(degrees) {
+        return degrees * (Math.PI / 180);
+      }
 
     basic_operation(source){
         var resultvalue = new Decimal("0.0");
@@ -277,7 +287,99 @@ class Service {
 
             return elements.join('');
         }
-        // elements = elements.filter(item => item !== "");
+    }
+    
+    excecute(expression) {
+        let tempStr = null;
+        const charset = new Set("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        if ([...expression].some(char => charset.has(char))) {
+            return false;
+        } else {
+            tempStr = expression.replace(/=/g, "");
+            // Continue using tempStr or perform other operations
+        }
+
+        //screening
+        let firstChar = tempStr[0];
+        if (firstChar === "^"){        
+            return false;
+        }else if (firstChar === "/"){
+            return false;
+        }else if (firstChar === "*"){
+            return false;
+        }else if (firstChar === "-"){
+            return false;
+        }else if (firstChar === "+"){
+            return false;
+        }
+        
+        const MAXIMUM_LOOP_NUM = 50;
+        let loopcounter = MAXIMUM_LOOP_NUM;
+        
+        //PREPARATION
+        tempStr = this.replace_constant(tempStr);
+        
+        //Comma Free
+        tempStr = tempStr.replaceAll(",", "");    
+        if(!tempStr.includes("(")){
+            loopcounter = 0;
+            //no braces
+            if (!this.isFloat(tempStr)){
+                tempStr = this.scientific_operation(tempStr);
+                tempStr = this.basic_operation(tempStr);
+            }
+        }
+        
+        while (loopcounter > 0)  {
+            tempStr = tempStr.replaceAll(' ','');
+            //let matches = tempStr.match(/\(([^)]+)\)/g);
+            let match = this.extractMostNestedBraces(tempStr);
+            if (match) {
+                let cloned = '(' + match + ')';//Array.from(match);
+                let result = null;
+                let j = 10;
+                for (let i = 0; i < cloned.length; i++){
+                    if(this.containsAlphabetChars(cloned)){
+                        result = this.scientific_operation(cloned.replace('(','').replace(')',''));
+                        while (j > 0) {
+                            if (result && this.isFloat(result)) {
+                                tempStr = tempStr.replace(cloned,result);
+                                j=0;
+                            }else{
+                                if(this.containsAlphabetChars(result)){
+                                    result = this.scientific_operation(result);
+                                }else{
+                                    result = this.basic_operation(result);
+                                }
+                            }  
+                            j-=1;
+                        } 
+                    }else{
+                        result = this.basic_operation(cloned.replace('(','').replace(')',''));
+                        if (result) {
+                            let ptn = cloned;
+                            tempStr = tempStr.replace(ptn,result);
+                        }           
+                    }
+                }
+            }
+
+            match = this.extractMostNestedBraces(tempStr);
+            if (!match) {
+                tempStr = this.scientific_operation(tempStr);
+                tempStr = this.basic_operation(tempStr);   
+            }
+            if (this.isFloat(tempStr)){
+                loopcounter = 0;
+            }
+            loopcounter -= 1;
+        }
+        
+        if (this.isFloat(tempStr)){
+            return tempStr;
+        }else{
+            return false;
+        }
     }
 }
 
