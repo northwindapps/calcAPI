@@ -17,7 +17,7 @@ console.log(service.basic_operation(str));
 }
 
 let str = '0.1 ^ 0.2 + sin60';
-str = 'sqrt4 + 2 * (sin60^2 + cos60^2)';
+str = '(sqrt(sqrt4 + 2 * (sin60^2 + cos60^2)))*2';
 // str = 'sqrt(2)';
 let result = excecute(str);
 console.log(result);
@@ -68,17 +68,18 @@ function excecute(expression) {
     
     while (loopcounter > 0)  {
         tempStr = tempStr.replaceAll(' ','');
-        let matches = tempStr.match(/\(([^)]+)\)/g);
-        if (matches) {
-            let cloned = Array.from(matches);
+        //let matches = tempStr.match(/\(([^)]+)\)/g);
+        let match = service.extractMostNestedBraces(tempStr);
+        if (match) {
+            let cloned = '(' + match + ')';//Array.from(match);
             let result = null;
             let j = 10;
             for (let i = 0; i < cloned.length; i++){
-                if(service.containsAlphabetChars(cloned[i])){
-                    result = service.scientific_operation(cloned[i].replace('(','').replace(')',''));
+                if(service.containsAlphabetChars(cloned)){
+                    result = service.scientific_operation(cloned.replace('(','').replace(')',''));
                     while (j > 0) {
                         if (result && service.isFloat(result)) {
-                            tempStr = tempStr.replace(cloned[i],result);
+                            tempStr = tempStr.replace(cloned,result);
                             j=0;
                         }else{
                             if(service.containsAlphabetChars(result)){
@@ -90,18 +91,20 @@ function excecute(expression) {
                         j-=1;
                     } 
                 }else{
-                    result = service.basic_operation(cloned[i].replace('(','').replace(')',''));
+                    result = service.basic_operation(cloned.replace('(','').replace(')',''));
                     if (result) {
-                        let ptn = cloned[i];
+                        let ptn = cloned;
                         tempStr = tempStr.replace(ptn,result);
                     }           
                 }
             }
         }
 
-        tempStr = service.scientific_operation(tempStr);
-        tempStr = service.basic_operation(tempStr);   
-        
+        match = service.extractMostNestedBraces(tempStr);
+        if (!match) {
+            tempStr = service.scientific_operation(tempStr);
+            tempStr = service.basic_operation(tempStr);   
+        }
         if (service.isFloat(tempStr)){
             loopcounter = 0;
         }

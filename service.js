@@ -233,6 +233,35 @@ you need this.
 
 
     */
+
+    extractMostNestedBraces(input) {
+        let depth = 0;
+        let currentDepth = 0;
+        let startIndex = -1;
+        let endIndex = -1;
+
+        for (let i = 0; i < input.length; i++) {
+            if (input[i] === '(') {
+                currentDepth++;
+                if (currentDepth > depth) {
+                    depth = currentDepth;
+                    startIndex = i;
+                }
+            } else if (input[i] === ')') {
+                if (currentDepth === depth) {
+                    endIndex = i;
+                    break;
+                }
+                currentDepth--;
+            }
+        }
+
+        if (startIndex !== -1 && endIndex !== -1) {
+            return input.substring(startIndex + 1, endIndex);
+        } else {
+            return null;
+        }
+    }
     
     scientific_operation(source){
         var resultvalue = new Decimal("0.0");
