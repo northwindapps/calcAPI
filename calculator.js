@@ -17,7 +17,7 @@ console.log(service.basic_operation(str));
 }
 
 let str = '0.1 ^ 0.2 + sin60';
-str = 'sqrt(4) + (sin60^2 + cos60^2)';
+str = 'sqrt4 + 2 * (sin60^2 + cos60^2)';
 // str = 'sqrt(2)';
 let result = excecute(str);
 console.log(result);
@@ -71,15 +71,24 @@ function excecute(expression) {
         let matches = tempStr.match(/\(([^)]+)\)/g);
         if (matches) {
             let cloned = Array.from(matches);
-            //(())の処理を行う    
             let result = null;
+            let j = 10;
             for (let i = 0; i < cloned.length; i++){
                 if(service.containsAlphabetChars(cloned[i])){
-
                     result = service.scientific_operation(cloned[i].replace('(','').replace(')',''));
-                    if (result) {
-                        tempStr = tempStr.replace(cloned[i],result);
-                    }        
+                    while (j > 0) {
+                        if (result && service.isFloat(result)) {
+                            tempStr = tempStr.replace(cloned[i],result);
+                            j=0;
+                        }else{
+                            if(service.containsAlphabetChars(result)){
+                                result = service.scientific_operation(result);
+                            }else{
+                                result = service.basic_operation(result);
+                            }
+                        }  
+                        j-=1;
+                    } 
                 }else{
                     result = service.basic_operation(cloned[i].replace('(','').replace(')',''));
                     if (result) {

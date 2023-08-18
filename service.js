@@ -424,14 +424,43 @@ you need this.
         
             
         }else{
-            for (let i = 0; i < elements.length; i++) {
-                if (elements[i] == "^" &&  typeof elements[i-1] !== "undefined" && this.isFloat(elements[i-1]) && typeof elements[i+1] !== "undefined" && this.isFloat(elements[i+1])) {                    
-                    let a = new Decimal(elements[i-1]);
-                    let b = new Decimal(elements[i+1]);
-                    var c =  a.pow(b);
-                    elements[i+1] = c.toString();
-                    elements[i-1] = "nil";
-                    elements[i] = "nil";                
+            if (elements.includes('^')) {
+                for (let i = 0; i < elements.length; i++) {
+                    if (elements[i] == "^" &&  typeof elements[i-1] !== "undefined" && this.isFloat(elements[i-1]) && typeof elements[i+1] !== "undefined" && this.isFloat(elements[i+1])) {                    
+                        let a = new Decimal(elements[i-1]);
+                        let b = new Decimal(elements[i+1]);
+                        var c =  a.pow(b);
+                        elements[i+1] = c.toString();
+                        elements[i-1] = "nil";
+                        elements[i] = "nil";                
+                    }
+                }
+            }else{
+                for (let i = 0; i < elements.length; i++) {
+                    if (elements[i] == "*" && typeof elements[i-1] !== "undefined" && this.isFloat(elements[i-1]) && typeof elements[i+1] !== "undefined" && this.isFloat(elements[i+1])) {
+                        let a = new Decimal(elements[i-1])
+                        let b = new Decimal(elements[i+1])
+                        resultvalue = a.times(b); 
+                        elements[i+1] = resultvalue.toString();
+                        elements[i-1] = "nil";
+                        elements[i] = "nil";
+                    }
+                    
+                    if (elements[i] == "/" && this.isFloat(elements[i-1]) && this.isFloat(elements[i+1])){
+                        let a = new Decimal(elements[i-1]);
+                        let b = new Decimal(elements[i+1]);
+                        if (elements[i+1] == "0") {
+                            elements[i-1] = "nil";
+                            elements[i] = "nil";
+                            elements[i+1] = "nil";
+                        }
+                        else{
+                            resultvalue = a.dividedBy(b);
+                            elements[i+1] = resultvalue.toString();
+                            elements[i-1] = "nil";
+                            elements[i] = "nil";
+                        }
+                    }
                 }
             }
             elements = elements.filter(function(item) {
