@@ -19,6 +19,7 @@ console.log(service.basic_operation(str));
 let str = '0.1 ^ 0.2 + sin60';
 str = 'logd(10*10)+(sqrt(sqrt4 + 2 * (sin60^2 + cos60^2)))*2';
 str = '(cos45 * sin45)';
+str = '(0 + 5) * (0 - 5)';
 // str = 'sqrt(2)';
 let result = excecute(str);
 console.log(result);
