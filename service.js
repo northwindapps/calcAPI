@@ -4,31 +4,10 @@ class Service {
     constructor(){}
     
     replace_constant(source){
-        const input = source;
-        input.replaceAll('pi', Math.PI.toString());
-        input.replaceAll('pi', Math.E.toString());
+        let input = source;
+        input = input.replaceAll('pi', Math.PI.toString());
+        input = input.replaceAll('pi', Math.E.toString());
         return input;
-    }
-    
-    
-    bracket_index(source,bracketsize){
-        const input = source//sin60,sqrt4,log
-        input.replaceAll('(',' ( ');
-        input.replaceAll(')',' ) ');
-        let elements = input.split(' '); 
-        let bracketcount = 0;
-        let calcuationstart = -1;
-        
-        for (let i = 0; i < elements.length; i++) {
-            if (elements[i] === '(') {
-                bracketcount += 1;
-                if (bracketcount === bracketsize) {
-                    calcuationstart = i + 1;
-                    bracketcount += 1;
-                }
-            }
-        }
-        return calcuationstart;//if -1 then over
     }
     
     num_check(source){
