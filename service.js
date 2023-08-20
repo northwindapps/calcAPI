@@ -1,12 +1,42 @@
 const Decimal = require('decimal.js');
 
 class Service {
-    constructor(){}
+    static reservedWords = [
+        'pi',
+        'e',
+        'asin',
+        'acos',
+        'atan',
+        'sin',
+        'cos',
+        'tan',
+        'exp',
+        'logb',
+        'logd',
+        'log',
+        'abs',
+        'sqrt'
+    ];
+
+    constructor(propertiesMap = []) {
+        this.properties = new Map(propertiesMap );
+    }
+    
+    getProperty(key) {
+        return this.properties.get(key);
+    }
     
     replace_constant(source){
         let input = source;
         input = input.replaceAll('pi', Math.PI.toString());
-        input = input.replaceAll('pi', Math.E.toString());
+        input = input.replaceAll('e', Math.E.toString());
+        const words = input.match(/[a-zA-Z]+/g) || [];
+        for (let index = 0; index < words.length; index++) {
+            if (!Service.reservedWords.includes(words[index]) && this.getProperty(words[index])) {
+                let value =  this.getProperty(words[index]).toString();
+                input = input.replaceAll(words[index], value);
+            } 
+        }
         return input;
     }
     
