@@ -18,21 +18,27 @@ class Service {
         'sqrt'
     ];
 
-    constructor(propertiesMap = []) {
-        this.properties = new Map(propertiesMap );
+    constructor() {
+        this.propertyMap = new Map();
     }
-    
+
+    setProperties(propertyMap) {
+    for (const [key, value] of propertyMap) {
+        this.propertyMap.set(key, value);
+    }
+    }
+
     getProperty(key) {
-        return this.properties.get(key);
+    return this.propertyMap.get(key);
     }
     
     replace_constant(source){
         let input = source;
         input = input.replaceAll('pi', Math.PI.toString());
         input = input.replaceAll('e', Math.E.toString());
-        const words = input.match(/[a-zA-Z]+/g) || [];
+        const words = input.match(/[a-zA-Z][0-9]*\b/g) ||  [];
         for (let index = 0; index < words.length; index++) {
-            if (!Service.reservedWords.includes(words[index]) && this.getProperty(words[index])) {
+            if (!Service.reservedWords.includes(words[index]) && this.getProperty(words[index]) != null) {
                 let value =  this.getProperty(words[index]).toString();
                 input = input.replaceAll(words[index], value);
             } 
@@ -331,11 +337,18 @@ class Service {
         //Comma Free
         tempStr = tempStr.replaceAll(",", "");    
         if(!tempStr.includes("(")){
-            loopcounter = 0;
+            loopcounter = 50;
             //no braces
             if (!this.isFloat(tempStr)){
-                tempStr = this.scientific_operation(tempStr);
-                tempStr = this.basic_operation(tempStr);
+                while (loopcounter > 0)  {                
+                    tempStr = this.scientific_operation(tempStr);
+                    tempStr = this.basic_operation(tempStr);
+
+                    if (this.isFloat(tempStr)){
+                        loopcounter = 0;
+                    }
+                    loopcounter -= 1;
+                }
             }
         }
         
@@ -364,7 +377,16 @@ class Service {
                             j-=1;
                         } 
                     }else{
-                        result = this.basic_operation(cloned.replace('(','').replace(')',''));
+                        let k = 50;
+                        let basicExp = cloned.replace('(','').replace(')','');
+                        while (k > 0)  {                
+                            result = this.basic_operation(basicExp);
+                            if (this.isFloat(result)){
+                                k = 0;
+                            }
+                            basicExp = result;
+                            k -= 1;
+                        }
                         if (result) {
                             let ptn = cloned;
                             tempStr = tempStr.replace(ptn,result);
