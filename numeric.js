@@ -66,7 +66,7 @@ for (let index = 0; index < l; index++) {
     service.setProperties(propertyMap);
 
     //k4
-    let k4_x0 = service.excecute('x0 * h');
+    let k4_x0 = service.excecute('x0 + h');
     propertyMap.set("x", k4_x0);
     service.setProperties(propertyMap);
     let k4_y0 = service.excecute('y0  + ' +k3);
