@@ -16,16 +16,20 @@ console.log(result);
 
 runge_kutta_method('y-x',0,2,0.1);
 
-function runge_kutta_method(fx,x0,y0,h) {
+function runge_kutta_method(fx,x0,y0,h,l=10) {
     // fx = y - x
     //k1
-    let k1_x0 = x0;
+    let k1_x0 = x0 ;
     let k1_y0 = y0;
-
-
     propertyMap.set("h", h);
+
+
+for (let index = 0; index < l; index++) {
+
+    k1_x0 = x0 + h * index;
     propertyMap.set("x0", k1_x0);
     propertyMap.set("y0", k1_y0);
+
     propertyMap.set("x", k1_x0);
     propertyMap.set("y", k1_y0);
     service.setProperties(propertyMap);
@@ -77,9 +81,14 @@ function runge_kutta_method(fx,x0,y0,h) {
 
     propertyMap.set("y", k1_y0);
     service.setProperties(propertyMap);
-    let y1 = service.excecute('y + ((k1 + 2*k2 + 2*k3 + k4)/6)');
-    k1_x0 = service.excecute('x + h');
-    k1_y0 = y1;
+    let y = service.excecute('y + ((k1 + 2*k2 + 2*k3 + k4)/6)');
+    let x = x0 + h * index;
+    k1_x0 = x;
+    k1_y0 = y;
 
+    
+    console.log(x);
+    console.log(y);
+}
     
 }
