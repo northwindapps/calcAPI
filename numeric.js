@@ -1,9 +1,6 @@
 const {Service} = require('./service');
 const Decimal = require('decimal.js');
 const service = new Service();
-
-
-
 const propertyMap = new Map();
 propertyMap.set("name", "John Doe");
 propertyMap.set("x", 30);
@@ -11,6 +8,7 @@ propertyMap.set("x", 30);
 // Set properties using the Map
 // service.setProperties(propertyMap);
 let exp = '2 + ((0.2 + 2 * 0.205 + 2 * 0.205 + 0.211 )/6)';
+exp = 'exp(0.1)+0.1+1'
 let result = service.excecute(exp);
 console.log(result);
 

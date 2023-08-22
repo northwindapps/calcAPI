@@ -35,7 +35,7 @@ class Service {
     replace_constant(source){
         let input = source;
         input = input.replaceAll('pi', Math.PI.toString());
-        input = input.replaceAll('e', Math.E.toString());
+        input = input.replaceAll(/(?<![a-zA-Z])e(?![a-zA-Z])/g, Math.E.toString());
         const words = input.match(/[a-zA-Z][0-9]*\b/g) ||  [];
         for (let index = 0; index < words.length; index++) {
             if (!Service.reservedWords.includes(words[index]) && this.getProperty(words[index]) != null) {
