@@ -1,5 +1,5 @@
 const Decimal = require('decimal.js');
-
+const propertyMap = new Map();
 class Service {
     static reservedWords = [
         'pi',
@@ -411,6 +411,86 @@ class Service {
         }else{
             return false;
         }
+    }
+
+    runge_kutta_method(fx,x0,y0,h,l=10) {
+        // fx = y - x
+        //k1
+        let k1_x0 = x0 ;
+        let k1_y0 = y0;
+        propertyMap.set("h", h);
+        let xAry = Array();
+        let yAry = Array();
+
+        xAry.push(x0.toString());
+        yAry.push(y0.toString());
+
+        for (let index = 0; index < l; index++) {
+
+            k1_x0 = x0 + h * (index+1);
+            propertyMap.set("x0", k1_x0);
+            propertyMap.set("y0", k1_y0);
+
+            propertyMap.set("x", k1_x0);
+            propertyMap.set("y", k1_y0);
+            this.setProperties(propertyMap);
+            let r1 = this.excecute(fx);
+            propertyMap.set("r1", r1);
+            this.setProperties(propertyMap);
+            let k1 = this.excecute('h*r1');
+            propertyMap.set("k1", k1);
+            this.setProperties(propertyMap);
+
+            //k2
+            let k2_x0 = this.excecute('x0 + 0.5 * h');
+            propertyMap.set("x", k2_x0);
+            this.setProperties(propertyMap);
+            let k2_y0 = this.excecute('y0 + 0.5 * ' + k1);
+            propertyMap.set("y", k2_y0);
+            this.setProperties(propertyMap);
+            let r2 = this.excecute(fx);
+            propertyMap.set("r2", r2);
+            this.setProperties(propertyMap);
+            let k2 = this.excecute('h*r2');
+            propertyMap.set("k2", k2);
+            this.setProperties(propertyMap);
+
+            //k3
+            let k3_y0 = this.excecute('y0 + 0.5 * ' + k2);
+            propertyMap.set("y", k3_y0);
+            this.setProperties(propertyMap);
+            let r3 = this.excecute(fx);
+            propertyMap.set("r3", r3);
+            this.setProperties(propertyMap);
+            let k3 = this.excecute('h*r3');
+            propertyMap.set("k3", k3);
+            this.setProperties(propertyMap);
+
+            //k4
+            let k4_x0 = this.excecute('x0 + h');
+            propertyMap.set("x", k4_x0);
+            this.setProperties(propertyMap);
+            let k4_y0 = this.excecute('y0  + ' +k3);
+            propertyMap.set("y", k4_y0);
+            this.setProperties(propertyMap);
+            let r4 = this.excecute(fx);
+            propertyMap.set("r4", r4);
+            this.setProperties(propertyMap);
+            let k4 = this.excecute('h*r4');
+            propertyMap.set("k4", k4);
+            this.setProperties(propertyMap);
+
+            propertyMap.set("y", k1_y0);
+            this.setProperties(propertyMap);
+            let y = this.excecute('y + ((k1 + 2*k2 + 2*k3 + k4)/6)');
+            k1_y0 = y;
+
+            
+            xAry.push(k1_x0.toString());
+            yAry.push(y);
+        }
+
+        return [xAry,yAry];
     }
 }
 
