@@ -34,7 +34,7 @@ app.get('/api/v1/runge_kutta4', (req, res) => {
         if (l === null) {
             result2 = service.runge_kutta_method(fx,x0,y0,h,null);
         }else{
-            result2 = service.runge_kutta_method(fx,x0,y0,h);
+            result2 = service.runge_kutta_method(fx,x0,y0,h,l);
         }
         const data = {
             x: result2[0],

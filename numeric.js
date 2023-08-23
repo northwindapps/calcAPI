@@ -12,7 +12,7 @@ exp = 'e'
 let result = service.excecute(exp);
 console.log(result);
 
-let result2 = service.runge_kutta_method('y^2+1',0,0,0.1);
+let result2 = service.runge_kutta_method('y^2+1',0,0,0.1,20);
 
 console.log(result2[0]);
 
