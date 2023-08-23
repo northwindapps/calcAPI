@@ -487,6 +487,8 @@ class Service {
             k1_y0 = y;          
             xAry.push(xi.toString());
             yAry.push(y);
+            console.log(fx);
+            console.log(y);
         }
 
         return [xAry,yAry];
