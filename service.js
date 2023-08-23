@@ -416,8 +416,9 @@ class Service {
     runge_kutta_method(fx,x0,y0,h,l=10) {
         // fx = y - x
         //k1
-        let k1_x0 = x0 ;
-        let k1_y0 = y0;
+        let xi = new Decimal(x0);
+        let k1_x0 = parseFloat(x0) ;
+        let k1_y0 = parseFloat(y0);
         propertyMap.set("h", h);
         let xAry = Array();
         let yAry = Array();
@@ -427,10 +428,10 @@ class Service {
 
         for (let index = 0; index < l; index++) {
 
-            k1_x0 = x0 + h * (index+1);
+            xi = xi.plus(h);
+            k1_x0 = x0 + parseFloat(h) * index
             propertyMap.set("x0", k1_x0);
             propertyMap.set("y0", k1_y0);
-
             propertyMap.set("x", k1_x0);
             propertyMap.set("y", k1_y0);
             this.setProperties(propertyMap);
@@ -483,10 +484,8 @@ class Service {
             propertyMap.set("y", k1_y0);
             this.setProperties(propertyMap);
             let y = this.excecute('y + ((k1 + 2*k2 + 2*k3 + k4)/6)');
-            k1_y0 = y;
-
-            
-            xAry.push(k1_x0.toString());
+            k1_y0 = y;          
+            xAry.push(xi.toString());
             yAry.push(y);
         }
 
