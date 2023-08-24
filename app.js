@@ -22,6 +22,19 @@ app.post('/api/v1/execute', (req, res) => {
 });
 
 // GET route
+app.get('/api/v1/execute', (req, res) => {
+    const data = req.query.exp;
+    console.log(data);
+    try {
+        let result = service.excecute(data);
+        res.status(200).json({ result: result });
+    }catch(error){
+        console.log(error);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+});
+
+// GET route
 app.get('/api/v1/runge_kutta4', (req, res) => {
     const fx = req.query.fx;
     const x0 = req.query.x0;
