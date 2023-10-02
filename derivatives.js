@@ -1,6 +1,7 @@
 const {Service} = require('./service');
 const Decimal = require('decimal.js');
 const service = new Service();
+const {Parser} = require('./Parser');
 
 function exec(str) {
 console.log(Math.PI);
@@ -23,7 +24,8 @@ console.log(service.basic_operation(str));
 // str = 'sqrt(2)';
 // let result = excecute(str);
 // console.log(result);
-const inputString = '-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2a^(x-3)y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sin(x)}{cos(x)}-4t';
+const inputString = '-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2a^(x-3)y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t';
+
 
 // const separator = /(?=[+-])(?![^{]*})/g;
 const resultArray = splitStringWithBrackets(inputString);
@@ -43,7 +45,13 @@ console.log(resultArray);
 //'frac{sin(x)}{cos(x)}', 
 //'-', 
 //'4t']
+for (let index = 0; index < resultArray.length; index++) {
+    const element = resultArray[index];
 
+    const parser = new Parser();
+    parser.parse(resultArray[index]);
+    
+}
 
 function splitStringWithBrackets(inputString) {
     // Use regular expression to split the string
@@ -53,7 +61,7 @@ function splitStringWithBrackets(inputString) {
     const result = parts.filter(part => part.trim() !== "");
     
     return result;
-  }
+}
 
 function excecute(expression) {
     let tempStr = null;
