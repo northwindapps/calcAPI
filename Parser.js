@@ -29,7 +29,7 @@ class Parser {
     this._tokenizer.init(string);
 
     this._lookahead = this._tokenizer.getNextToken();
-    console.log(this._lookahead);
+    return this._lookahead;
   }
 
 }

@@ -30,7 +30,7 @@ const inputString = '-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2a^(x-3)y^3-e^(2x^2+3x+
 // const separator = /(?=[+-])(?![^{]*})/g;
 const resultArray = splitStringWithBrackets(inputString);
 
-console.log(resultArray);
+// console.log(resultArray);
 // ['-', 
 //'5x^3', 
 //'+', 
@@ -46,10 +46,21 @@ console.log(resultArray);
 //'-', 
 //'4t']
 for (let index = 0; index < resultArray.length; index++) {
-    const element = resultArray[index];
+    let element = resultArray[index];
 
     const parser = new Parser();
-    parser.parse(resultArray[index]);
+    let counter = 10;
+    while (counter>0) {
+        let result = parser.parse(element);    
+        element = result.next;
+        if(element == ""){
+            counter = -1;
+        }
+        console.log(result);
+        counter -= 1;
+    }
+    
+
     
 }
 

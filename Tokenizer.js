@@ -10,15 +10,36 @@
  * Tokenizer spec.
  */
 const Spec = [
-    [/^\bsqrt\b/, 'sqrt'],
+
   
+  [/^\{/,'{'],
+
+  [/^\}/,'}'],
+
+  [/^\(/,'('],
+
+  [/^\)/,')'],
+
     [/^\d+/, 'NUMBER'],
+
+    [/^\bsqrt\b/, 'sqrt'],
+
+    [/^\bln\b/, 'ln'],
+
+    [/e\^/, 'e^'],
+
+    [/x\^/, 'x^'],
+
+    [/a\^/, 'a^'],
+  
+  
   
     [/^\w+/,'IDENTIFIER'],
   
     [/^[+\-]/, 'ADDITIVE_OPERATOR'],
+
     
-    [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
+    // [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
 
   ];
   
@@ -74,6 +95,7 @@ const Spec = [
         return{
           type: tokenType,
           value: tokenValue,
+          next: this._string.slice(this._cursor)
         };
       }
   
