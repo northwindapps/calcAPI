@@ -27,9 +27,7 @@ class Parser {
   parse(string) {
     this._string = string;
     this._tokenizer.init(string);
-
-    this._lookahead = this._tokenizer.getNextToken();
-    return this._lookahead;
+    return this._tokenizer.getNextToken();
   }
 
 }

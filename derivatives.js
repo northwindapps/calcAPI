@@ -30,7 +30,7 @@ const inputString = '-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2a^(x-3)y^3-e^(2x^2+3x+
 // const separator = /(?=[+-])(?![^{]*})/g;
 const resultArray = splitStringWithBrackets(inputString);
 
-// console.log(resultArray);
+console.log(resultArray);
 // ['-', 
 //'5x^3', 
 //'+', 
@@ -45,9 +45,9 @@ const resultArray = splitStringWithBrackets(inputString);
 //'frac{sin(x)}{cos(x)}', 
 //'-', 
 //'4t']
+let list = [];
 for (let index = 0; index < resultArray.length; index++) {
     let element = resultArray[index];
-
     const parser = new Parser();
     let counter = 10;
     while (counter>0) {
@@ -56,13 +56,16 @@ for (let index = 0; index < resultArray.length; index++) {
         if(element == ""){
             counter = -1;
         }
-        console.log(result);
+        list.push(result);
+
+        if (counter === -1) {
+            list.push({ type: 'EOE', value: 'EOE', next: null });
+        }
         counter -= 1;
     }
-    
-
-    
 }
+console.log(list);
+
 
 function splitStringWithBrackets(inputString) {
     // Use regular expression to split the string
