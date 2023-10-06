@@ -71,21 +71,22 @@ for (let index = 0; index < resultArray.length; index++) {
 // console.log(list);
 
 function elementCalc(element) {
-   console.log(element); 
-   //TODO read remaining
+    console.log(element); 
+    //TODO read remaining
    
-   let openIndex = element[0].next.indexOf("(");
-   let closeIndex = element[0].next.lastIndexOf(")");
-   let outerContent = '';
-   if (openIndex !== -1 && closeIndex !== -1 && closeIndex > openIndex) {
-     outerContent = element[0].next.substring(openIndex + 1, closeIndex);
-     console.log(outerContent);
-   } 
+    let openIndex = element[0].next.indexOf("(");
+    let closeIndex = element[0].next.lastIndexOf(")");
+    let outerContent = '';
+    if (openIndex !== -1 && closeIndex !== -1 && closeIndex > openIndex) {
+        outerContent = element[0].next.substring(openIndex + 1, closeIndex);
+        console.log(outerContent);
+    } 
 
-//    for (let index = 0; index < element.length; index++) {
+
     const resultArraySub = splitStringWithBracketsSub(outerContent);
-    console.log('resultArraySub');
-    console.log(resultArraySub);
+    for (let index = 0; index < resultArraySub.length; index++) {
+        console.log('resultArraySub[' + index + ']');
+        console.log(resultArraySub[index]);
     
 //     if (element[index].value.includes('^')) {
         
@@ -135,7 +136,7 @@ function elementCalc(element) {
 // }
 
     
-//    }
+   }
 }
 
 function splitStringWithBrackets(inputString) {
