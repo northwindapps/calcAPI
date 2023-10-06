@@ -24,7 +24,7 @@ console.log(service.basic_operation(str));
 // str = 'sqrt(2)';
 // let result = excecute(str);
 // console.log(result);
-const inputString = '-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2a^(x-3)y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t';
+const inputString = '-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t';
 
 
 // const separator = /(?=[+-])(?![^{]*})/g;
@@ -79,14 +79,39 @@ function elementCalc(element) {
     let outerContent = '';
     if (openIndex !== -1 && closeIndex !== -1 && closeIndex > openIndex) {
         outerContent = element[0].next.substring(openIndex + 1, closeIndex);
-        console.log(outerContent);
+        // console.log(outerContent);
     } 
 
-
+    let listSub = [];
     const resultArraySub = splitStringWithBracketsSub(outerContent);
     for (let index = 0; index < resultArraySub.length; index++) {
         console.log('resultArraySub[' + index + ']');
-        console.log(resultArraySub[index]);
+        let elementSub = resultArraySub[index];
+        console.log(elementSub);
+        const parser = new Parser();
+        let counterSub = 99;
+        let elementListSub = [];
+        while (counterSub>0) {
+            let resultSub = parser.parse(elementSub);
+            // console.log(resultSub);    
+            elementSub = resultSub.value;
+            if(resultSub.value == "" || resultSub.next == ""){
+                counterSub = -1;
+            }
+            listSub.push(resultSub);
+            elementListSub.push(resultSub);
+
+            if (counterSub === -1) {
+                // elementCalc(elementList);
+            
+                listSub.push({ type: 'EOE', value: 'EOE', next: null });
+            }
+            counterSub -= 1;
+        }
+    
+    }
+    console.log('listSub');
+    console.log(listSub);
     
 //     if (element[index].value.includes('^')) {
         
@@ -134,9 +159,6 @@ function elementCalc(element) {
 //         }
 // }
 // }
-
-    
-   }
 }
 
 function splitStringWithBrackets(inputString) {

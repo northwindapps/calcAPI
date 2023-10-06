@@ -28,6 +28,8 @@ const Spec = [
 
     [/^\bfrac\b/, 'frac'],
 
+    [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
+
     [/e\^/, 'e^'],
 
     [/x\^/, 'x^'],
@@ -42,7 +44,7 @@ const Spec = [
     [/^[+\-]/, 'ADDITIVE_OPERATOR'],
 
     
-    // [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
+   
 
   ];
   
