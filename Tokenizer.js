@@ -26,13 +26,16 @@ const Spec = [
 
     [/^\bln\b/, 'ln'],
 
+    [/^\bfrac\b/, 'frac'],
+
     [/e\^/, 'e^'],
 
     [/x\^/, 'x^'],
 
-    [/a\^/, 'a^'],
-  
-  
+   
+
+    [/[a-z]\^/, 'slt^'],
+
   
     [/^\w+/,'IDENTIFIER'],
   

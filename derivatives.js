@@ -30,7 +30,7 @@ const inputString = '-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2a^(x-3)y^3-e^(2x^2+3x+
 // const separator = /(?=[+-])(?![^{]*})/g;
 const resultArray = splitStringWithBrackets(inputString);
 
-console.log(resultArray);
+// console.log(resultArray);
 // ['-', 
 //'5x^3', 
 //'+', 
@@ -49,7 +49,8 @@ let list = [];
 for (let index = 0; index < resultArray.length; index++) {
     let element = resultArray[index];
     const parser = new Parser();
-    let counter = 10;
+    let counter = 999999999;
+    let elementList = [];
     while (counter>0) {
         let result = parser.parse(element);    
         element = result.next;
@@ -57,20 +58,98 @@ for (let index = 0; index < resultArray.length; index++) {
             counter = -1;
         }
         list.push(result);
+        elementList.push(result);
 
         if (counter === -1) {
+            elementCalc(elementList);
             list.push({ type: 'EOE', value: 'EOE', next: null });
+
         }
         counter -= 1;
     }
 }
-console.log(list);
+// console.log(list);
 
+function elementCalc(element) {
+   console.log(element); 
+   //TODO read remaining
+   
+   let openIndex = element[0].next.indexOf("(");
+   let closeIndex = element[0].next.lastIndexOf(")");
+   let outerContent = '';
+   if (openIndex !== -1 && closeIndex !== -1 && closeIndex > openIndex) {
+     outerContent = element[0].next.substring(openIndex + 1, closeIndex);
+     console.log(outerContent);
+   } 
+
+//    for (let index = 0; index < element.length; index++) {
+    const resultArraySub = splitStringWithBracketsSub(outerContent);
+    console.log('resultArraySub');
+    console.log(resultArraySub);
+    
+//     if (element[index].value.includes('^')) {
+        
+    
+//     const regex = /[+-]/;
+//     // Extract the content inside parentheses using a regular expression
+//     const matches = element[index].next.match(/\(([^)]+)\)/);
+
+//     // if (matches) {
+//         // const contentInsideParentheses = matches[1]; // Get the content inside parentheses
+//         const containsPlusOrMinus = regex.test(element[index].next);
+
+//         if (containsPlusOrMinus) {
+//             console.log("The content inside parentheses contains '+' or '-'");
+     
+//     const resultArraySub = splitStringWithBrackets(element[index].next);
+//     let listSub = [];
+//     for (let index = 0; index < resultArraySub.length; index++) {
+//         let elementSub = resultArraySub[index];
+        
+//         console.log(elementSub);
+//         const parser = new Parser();
+//         let counterSub = 999999999;
+//         let elementListSub = [];
+//         while (counterSub>0) {
+//             let resultSub = parser.parse(elementSub);    
+//             elementSub = resultSub.value;
+//             if(elementSub == ""){
+//                 counterSub = -1;
+//             }
+//             listSub.push(resultSub);
+//             elementListSub.push(resultSub);
+
+//             if (counterSub === -1) {
+//                 // elementCalc(elementList);
+            
+//                 listSub.push({ type: 'EOE', value: 'EOE', next: null });
+//             }
+//             counterSub -= 1;
+//         }
+    
+//     }
+//     console.log('listSub');
+//     console.log(listSub);
+//         }
+// }
+// }
+
+    
+//    }
+}
 
 function splitStringWithBrackets(inputString) {
     // Use regular expression to split the string
     const parts = inputString.split(/([+-])(?![^{]*}|[^\[]*]|[^\(]*\))/g);
     
+    // Filter out empty strings from the result
+    const result = parts.filter(part => part.trim() !== "");
+    
+    return result;
+}
+
+function splitStringWithBracketsSub(inputString){
+    const parts = inputString.split(/([+-])/).filter(Boolean);
     // Filter out empty strings from the result
     const result = parts.filter(part => part.trim() !== "");
     
