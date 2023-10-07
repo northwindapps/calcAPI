@@ -24,9 +24,9 @@ console.log(service.basic_operation(str));
 // str = 'sqrt(2)';
 // let result = excecute(str);
 // console.log(result);
-const inputString = '-x^2-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t';
-
-
+let inputString = '-x^2-5x^3+sqrt(x^0.75-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t';
+// nputString = x^frac{3}{4};
+// inputString = parseFraction(inputString);
 // const separator = /(?=[+-])(?![^{]*})/g;
 const resultArray = splitStringWithBrackets(inputString);
 
@@ -49,7 +49,8 @@ let list = [];
 for (let index = 0; index < resultArray.length; index++) {
     let element = resultArray[index];
     const parser = new Parser();
-    let counter = 999999999;
+    const parser2 = new Parser();
+    let counter = 999;
     let elementList = [];
     while (counter>0) {
         let result = parser.parse(element);    
@@ -71,7 +72,31 @@ for (let index = 0; index < resultArray.length; index++) {
                 // }
                 let content = getOuterParencesContent(elementList[0].next);
                 const subsubElements = splitStringWithBracketsSub(content);
-                console.log('subsub-element',subsubElements);
+                // console.log('subsub-element',subsubElements);
+                for (let index = 0; index < subsubElements.length; index++) {
+                    let counterSub2 = 99;
+                    let elementListSub2 = [];
+                    let element2 = subsubElements[index];
+                    while (counterSub2>0) {
+                        let resultSub2 = parser2.parse(element2);
+                        element2= resultSub2.next;
+                       
+                        if(resultSub2.value == "" || resultSub2.next == ""){
+                            counterSub2 = -1;
+                        }
+                        elementListSub2.push(resultSub2);
+                        
+            
+                        if (counterSub2 === -1) {
+                            // elementCalc(elementList);
+                        
+                            elementListSub2.push({ type: 'EOE', value: 'EOE', next: null });
+                        }
+                        counterSub2 -= 1;
+                    }
+                    console.log('subsub-elements',elementListSub2);   
+                    calculate(elementListSub2);
+                }
             }else{
                 if (elementList.length !== 0 && elementList[0].next.length > 0) {
                     console.log('ready-to-calculate');    
@@ -121,6 +146,24 @@ function calculate(objects) {
 
     
 }
+
+function parseFraction(input) {
+    // Use a regular expression to match the fraction pattern
+    const regex = /frac{(\d+)\/(\d+)}/;
+    const match = input.match(regex);
+  
+    if (match) {
+      // Extract the numerator and denominator from the matched groups
+      const numerator = new Decimal(match[1]);
+      const denominator = new Decimal(match[2]);
+  
+      const result = numerator.dividedBy(denominator);
+      result.toString();
+    } else {
+      // Return an error message or handle invalid input as needed
+      return input; // Or throw an error
+    }
+  }
 
 function isNumeric(str) {
     // Use a regular expression to check if the string is numeric

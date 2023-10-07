@@ -20,7 +20,7 @@ const Spec = [
 
   [/^\)/,')'],
 
-    [/^\d+/, 'NUMBER'],
+    [/^\d+(\.\d+)?/, 'NUMBER'],
 
     [/^\bsqrt\b/, 'sqrt'],
 
@@ -28,13 +28,16 @@ const Spec = [
 
     [/^\bfrac\b/, 'frac'],
 
+
+
+
     [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
 
     [/e\^/, 'e^'],
 
     [/x\^/, 'x^'],
 
-   
+    [/^\bx\b/, 'x'],
 
     [/[a-z]\^/, 'slt^'],
 
