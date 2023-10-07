@@ -61,17 +61,86 @@ for (let index = 0; index < resultArray.length; index++) {
         elementList.push(result);
 
         if (counter === -1) {
-            elementCalc(elementList);
+            let subElements = elementCheck(elementList);
+            if(subElements){
+                console.log('nested', subElements);
+            }else{
+                console.log('ready-to-calculate');
+                calculate(elementList);
+            }
             list.push({ type: 'EOE', value: 'EOE', next: null });
 
         }
         counter -= 1;
     }
 }
-// console.log(list);
+console.log('list',list);
 
-function elementCalc(element) {
-    console.log(element); 
+function calculate(objects) {
+    for (let index = 0; index < objects.length; index++) {
+        const element = objects[index];
+        switch (element.type) {
+            case 'x^':
+                if (isNumeric(element.next)) {
+                    if(index==0){
+
+                    }else{
+                        const indexMinus = index-1;
+                        if (isNumeric(objects[indexMinus].value)) {
+                            let previous = new Decimal(objects[indexMinus].value);
+                            let next = new Decimal(element.next);
+                            let coef = previous.times(next);
+                            let one = new Decimal(1.0);
+                            let sub = next.minus(one);
+                            console.log('subProduct1', coef + 'x^' + sub );
+                        }
+                    }
+                }
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+    
+}
+
+function isNumeric(str) {
+    // Use a regular expression to check if the string is numeric
+    // It allows for an optional sign (+ or -), followed by digits (integer part)
+    // Optionally followed by a decimal point and more digits (fractional part)
+    const numericRegex = /^[-+]?[0-9]*\.?[0-9]+$/;
+    return numericRegex.test(str);
+  }
+
+function stringToFloatAndCheckValidity(str) {
+    if (str.includes('.')) {
+        const floatValue = parseFloat(str);  
+        // Check if the parsed value is a valid number
+        if (!isNaN(floatValue) && isFinite(floatValue)) {
+        // floatValue is a valid floating-point number
+        return floatValue;
+        } else {
+        // Invalid input or couldn't parse as a float
+        return null; // You can return null, throw an error, or handle it as needed
+        }
+    }else{
+        const intValue = parseInt(str);  
+        // Check if the parsed value is a valid number
+        if (!isNaN(intValue) && isFinite(intValue)) {
+        // floatValue is a valid floating-point number
+        return intValue;
+        } else {
+        // Invalid input or couldn't parse as a float
+        return null; // You can return null, throw an error, or handle it as needed
+        }
+    }
+}
+  
+
+function elementCheck(element) {
+    console.log('rootElement',element); 
     //TODO read remaining
    
     let openIndex = element[0].next.indexOf("(");
@@ -85,9 +154,9 @@ function elementCalc(element) {
     let listSub = [];
     const resultArraySub = splitStringWithBracketsSub(outerContent);
     for (let index = 0; index < resultArraySub.length; index++) {
-        console.log('resultArraySub[' + index + ']');
+        // console.log('resultArraySub[' + index + ']');
         let elementSub = resultArraySub[index];
-        console.log(elementSub);
+        // console.log(elementSub);
         const parser = new Parser();
         let counterSub = 99;
         let elementListSub = [];
@@ -110,8 +179,8 @@ function elementCalc(element) {
         }
     
     }
-    console.log('listSub');
-    console.log(listSub);
+
+    return (Object.keys(listSub).length === 0) ? false : listSub;
     
 //     if (element[index].value.includes('^')) {
         
