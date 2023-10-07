@@ -61,11 +61,21 @@ for (let index = 0; index < resultArray.length; index++) {
         elementList.push(result);
 
         if (counter === -1) {
+            //this method is fishy
             let subElements = elementCheck(elementList);
             if(subElements){
-                console.log('nested', subElements);
+                // for (let index = 0; index < elementList.length; index++) {
+                //     const subElement = elementList[index];
+                //     console.log('subelement-each', subElement);
+                    
+                // }
+                let content = getOuterParencesContent(elementList[0].next);
+                const subsubElements = splitStringWithBracketsSub(content);
+                console.log('subsub-element',subsubElements);
             }else{
-                console.log('ready-to-calculate');
+                if (elementList.length !== 0 && elementList[0].next.length > 0) {
+                    console.log('ready-to-calculate');    
+                }
                 calculate(elementList);
             }
             list.push({ type: 'EOE', value: 'EOE', next: null });
@@ -79,6 +89,7 @@ console.log('list',list);
 function calculate(objects) {
     for (let index = 0; index < objects.length; index++) {
         const element = objects[index];
+        console.log('eachElement',element);
         switch (element.type) {
             case 'x^':
                 if (isNumeric(element.next)) {
@@ -100,7 +111,9 @@ function calculate(objects) {
                     }
                 }
                 break;
-        
+            case 'sqrt':
+
+                break;
             default:
                 break;
         }
@@ -141,6 +154,16 @@ function stringToFloatAndCheckValidity(str) {
     }
 }
   
+function getOuterParencesContent(inputStr) {
+    let openIndex = inputStr.indexOf("(");
+    let closeIndex = inputStr.lastIndexOf(")");
+    let outerContent = '';
+    if (openIndex !== -1 && closeIndex !== -1 && closeIndex > openIndex) {
+        outerContent = inputStr.substring(openIndex + 1, closeIndex);
+        // console.log(outerContent);
+    } 
+    return outerContent;
+}
 
 function elementCheck(element) {
     console.log('rootElement',element); 
