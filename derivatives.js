@@ -24,7 +24,7 @@ console.log(service.basic_operation(str));
 // str = 'sqrt(2)';
 // let result = excecute(str);
 // console.log(result);
-const inputString = '-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t';
+const inputString = '-x^2-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t';
 
 
 // const separator = /(?=[+-])(?![^{]*})/g;
@@ -83,7 +83,10 @@ function calculate(objects) {
             case 'x^':
                 if (isNumeric(element.next)) {
                     if(index==0){
-
+                        let coef = new Decimal(element.next);
+                        let one = new Decimal(1.0);
+                        let sub = coef.minus(one);
+                        console.log('subProduct1', coef + 'x^' + sub );
                     }else{
                         const indexMinus = index-1;
                         if (isNumeric(objects[indexMinus].value)) {
