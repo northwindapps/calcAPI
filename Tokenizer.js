@@ -10,7 +10,6 @@
  * Tokenizer spec.
  */
 const Spec = [
-
   
   [/^\{/,'{'],
 
@@ -20,34 +19,33 @@ const Spec = [
 
   [/^\)/,')'],
 
-    [/^\d+(\.\d+)?/, 'NUMBER'],
+  [/^\d+(\.\d+)?/, 'NUMBER'],
 
-    [/^\bsqrt\b/, 'sqrt'],
+  [/^\bsqrt\b/, 'sqrt'],
 
-    [/^\bln\b/, 'ln'],
+  [/^\bln\b/, 'ln'],
 
-    [/^\bfrac\b/, 'frac'],
+  [/^\bfrac\b/, 'frac'],
 
+  [/^\bsinx\b/, 'sinx'],
 
+  [/^\bcosx\b/, 'cosx'],
 
+  [/^\btanx\b/, 'tanx'],
 
-    [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
+  [/^[*\/]/, 'MULTIPLICATIVE_OPERATOR'],
 
-    [/e\^/, 'e^'],
+  [/e\^/, 'e^'],
 
-    [/x\^/, 'x^'],
+  [/x\^/, 'x^'],
 
-    [/^\bx\b/, 'x'],
+  [/^\bx\b/, 'x'],
 
-    [/[a-z]\^/, 'slt^'],
+  [/[a-z]\^/, 'slt^'],
 
+  [/^\w+/,'IDENTIFIER'],
   
-    [/^\w+/,'IDENTIFIER'],
-  
-    [/^[+\-]/, 'ADDITIVE_OPERATOR'],
-
-    
-   
+  [/^[+\-]/, 'ADDITIVE_OPERATOR'],
 
   ];
   

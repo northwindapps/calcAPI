@@ -11,7 +11,7 @@ const {Parser} = require('./Parser');
 // str = 'sqrt(2)';
 // let result = excecute(str);
 // console.log(result);
-let inputString = '-x^2-5x^3+sqrt(x^0.75-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t';
+let inputString = 'tanx-x^2-5x^3+sqrt(x^0.75-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t+sinx-4cosx';
 console.log('inputString',inputString);
 // nputString = x^frac{3}{4};
 // inputString = parseFraction(inputString);
@@ -187,6 +187,41 @@ function calculate(objects) {
                 break;
             case '(':
                 isAborted = true;
+                break;
+            case 'cosx':
+                if(index==0){
+                    console.log('subProduct1', '-sinx' );
+                }else{
+                    const indexMinus = index-1;
+                    if (isNumeric(objects[indexMinus].value)) {
+                        let previous = new Decimal(objects[indexMinus].value);
+                        let next = new Decimal(-1.0);
+                        let coef = previous.times(next);
+                        console.log('subProduct1', coef + 'sinx' );
+                    }
+                }
+                break;
+            case 'sinx':
+                if(index==0){
+                    console.log('subProduct1', 'cosx' );
+                }else{
+                    const indexMinus = index-1;
+                    if (isNumeric(objects[indexMinus].value)) {
+                        let previous = new Decimal(objects[indexMinus].value);
+                        console.log('subProduct1', previous + 'cosx' );
+                    }
+                }
+                break;
+            case 'tanx':
+                if(index==0){
+                    console.log('subProduct1', '(secx)^2' );
+                }else{
+                    const indexMinus = index-1;
+                    if (isNumeric(objects[indexMinus].value)) {
+                        let previous = new Decimal(objects[indexMinus].value);
+                        console.log('subProduct1', previous + '(secx)^2' );
+                    }
+                }
                 break;
             default:
                 break;
