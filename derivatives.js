@@ -60,7 +60,8 @@ for (let index = 0; index < resultArray.length; index++) {
                 // }
 
                 const isWrapedWithParenthesis = parenthesisCheck(elementList[0].next);
-                if (isWrapedWithParenthesis) {
+                const isWrapedWithParenthesis2 = parenthesisCheck(elementList[1].next);
+                if (isWrapedWithParenthesis || isWrapedWithParenthesis2) {
                     calculate(elementList);
                 }
                 let content = getOuterParencesContent(elementList[0].next);
@@ -170,6 +171,17 @@ function calculate(objects) {
                     if (isNumeric(objects[indexMinus].value)) {
                         let previous = new Decimal(objects[indexMinus].value);
                         console.log('subProduct1', previous + 'e^' + element.next);
+                    }
+                }
+                break;
+            case 'ln':
+                if(index==0){
+                    console.log('subProduct1', element.next + '^-1');
+                }else{
+                    const indexMinus = index-1;
+                    if (isNumeric(objects[indexMinus].value)) {
+                        let previous = new Decimal(objects[indexMinus].value);
+                        console.log('subProduct1', previous + '*' + element.next + '^-1');
                     }
                 }
                 break;
