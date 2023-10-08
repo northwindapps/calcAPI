@@ -162,6 +162,17 @@ function calculate(objects) {
                     }
                 }
                 break;
+            case 'e^':
+                if(index==0){
+                    console.log('subProduct1', 'e^' + element.next);
+                }else{
+                    const indexMinus = index-1;
+                    if (isNumeric(objects[indexMinus].value)) {
+                        let previous = new Decimal(objects[indexMinus].value);
+                        console.log('subProduct1', previous + 'e^' + element.next);
+                    }
+                }
+                break;
             case '(':
                 isAborted = true;
                 break;
