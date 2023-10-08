@@ -11,7 +11,7 @@ const {Parser} = require('./Parser');
 // str = 'sqrt(2)';
 // let result = excecute(str);
 // console.log(result);
-let inputString = 'tanx-x^2-5x^3+sqrt(x^0.75-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t+sinx-4cosx';
+let inputString = 'tanx-x^2-5x^3+sqrt(x^0.75-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+5frac{x^2}{x^3+5x}-4t+sinx-4cosx';
 console.log('inputString',inputString);
 // nputString = x^frac{3}{4};
 // inputString = parseFraction(inputString);
@@ -223,12 +223,81 @@ function calculate(objects) {
                     }
                 }
                 break;
+            case 'frac':
+                quotientOperation(objects[index].next);
+                if(index==0){
+                    console.log('subProduct1', 'frac' );
+                }else{
+                    console.log('subProduct1', 'frac' );
+                }
+                break;
             default:
                 break;
         }
     }
 
     
+}
+
+function quotientOperation(inputStr){
+
+    // Create a regular expression to match text inside curly braces
+    const regex = /\{([^}]*)\}/g;
+
+    // Use the `match` method with the regular expression to find all matches
+    const matches = inputStr.match(regex);
+
+    // Extract the contents of the curly braces
+    const contents = matches.map(match => match.slice(1, -1));
+    const parser3 = new Parser();
+    const parser4 = new Parser();
+    // let ux = parser3.parse(contents[0]); 
+    // let vx = parser3.parse(contents[1]);
+    // console.log(ux);
+    // console.log(vx); 
+    // {'(x^3+5x)^2'}    
+    let counterSub3 = 99;
+    let elementListSub3 = [];
+    let element3 = contents[0];
+    while (counterSub3>0) {
+        let resultSub3 = parser3.parse(element3);
+        element3= resultSub3.next;
+        
+        if(resultSub3.value == "" || resultSub3.next == ""){
+            counterSub3 = -1;
+        }
+        elementListSub3.push(resultSub3);
+        if (counterSub3 === -1) {
+            // elementCalc(elementList);
+            elementListSub3.push({ type: 'EOE', value: 'EOE', next: null });
+        }
+        counterSub3 -= 1;
+    }
+    console.log(elementListSub3);
+
+    let counterSub4 = 99;
+    let elementListSub4 = [];
+    let element4 = contents[1];
+    while (counterSub4>0) {
+        let resultSub4 = parser4.parse(element4);
+        element4= resultSub4.next;
+        
+        if(resultSub4.value == "" || resultSub4.next == ""){
+            counterSub4 = -1;
+        }
+        elementListSub4.push(resultSub4);
+        if (counterSub4 === -1) {
+            // elementCalc(elementList);
+            elementListSub4.push({ type: 'EOE', value: 'EOE', next: null });
+        }
+        counterSub4 -= 1;
+    }
+    console.log(elementListSub4);
+
+    // check if arg is a polynomial
+    // calculate(elementListSub3);
+    // calculate(elementListSub4);
+
 }
 
 function parenthesisCheck(inputStr) {
