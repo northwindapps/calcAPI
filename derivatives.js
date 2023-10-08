@@ -129,7 +129,11 @@ function calculate(objects) {
                             let coef = previous.times(next);
                             let one = new Decimal(1.0);
                             let sub = next.minus(one);
-                            console.log('subProduct1', coef + 'x^' + sub );
+                            if (sub.toString() === '1') {
+                                console.log('subProduct1', coef + 'x' );   
+                            }else{
+                                console.log('subProduct1', coef + 'x^' + sub );
+                            }
                         }
                     }
                 }
