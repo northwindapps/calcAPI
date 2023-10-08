@@ -12,6 +12,7 @@ const {Parser} = require('./Parser');
 // let result = excecute(str);
 // console.log(result);
 let inputString = '-x^2-5x^3+sqrt(x^0.75-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t';
+console.log('inputString',inputString);
 // nputString = x^frac{3}{4};
 // inputString = parseFraction(inputString);
 // const separator = /(?=[+-])(?![^{]*})/g;
@@ -57,9 +58,14 @@ for (let index = 0; index < resultArray.length; index++) {
                 //     console.log('subelement-each', subElement);
                     
                 // }
+
+                const isWrapedWithParenthesis = parenthesisCheck(elementList[0].next);
+                if (isWrapedWithParenthesis) {
+                    calculate(elementList);
+                }
                 let content = getOuterParencesContent(elementList[0].next);
                 const subsubElements = splitStringWithBracketsSub(content);
-                // console.log('subsub-element',subsubElements);
+                console.log('subsub-element',subsubElements);
                 for (let index = 0; index < subsubElements.length; index++) {
                     let counterSub2 = 99;
                     let elementListSub2 = [];
@@ -99,9 +105,10 @@ for (let index = 0; index < resultArray.length; index++) {
 console.log('list',list);
 
 function calculate(objects) {
-    for (let index = 0; index < objects.length; index++) {
+    let isAborted = false;
+    for (let index = 0; !isAborted && index < objects.length; index++) {
         const element = objects[index];
-        console.log('eachElement',element);
+        // console.log('eachElement',element);
         switch (element.type) {
             case 'x^':
                 if (isNumeric(element.next)) {
@@ -109,7 +116,11 @@ function calculate(objects) {
                         let coef = new Decimal(element.next);
                         let one = new Decimal(1.0);
                         let sub = coef.minus(one);
-                        console.log('subProduct1', coef + 'x^' + sub );
+                        if (sub.toString() === '1') {
+                            console.log('subProduct1', coef + 'x' );   
+                        }else{
+                            console.log('subProduct1', coef + 'x^' + sub );
+                        }
                     }else{
                         const indexMinus = index-1;
                         if (isNumeric(objects[indexMinus].value)) {
@@ -135,7 +146,20 @@ function calculate(objects) {
                 }
                 break;
             case 'sqrt':
-
+                if(index==0){
+                    console.log('subProduct1', '0.5*' + element.next);
+                }else{
+                    const indexMinus = index-1;
+                    if (isNumeric(objects[indexMinus].value)) {
+                        let previous = new Decimal(objects[indexMinus].value);
+                        let next = new Decimal(0.5);
+                        let coef = previous.times(next);
+                        console.log('subProduct1', coef + '*' + element.next);
+                    }
+                }
+                break;
+            case '(':
+                isAborted = true;
                 break;
             default:
                 break;
@@ -143,6 +167,17 @@ function calculate(objects) {
     }
 
     
+}
+
+function parenthesisCheck(inputStr) {
+    const regex = /^\(.+\)$/; // Regular expression pattern
+    if (regex.test(inputStr)) {
+        // console.log("The string starts with '(' and ends with ')'");
+        return true;
+    } else {
+        // console.log("The string does not start with '(' and end with ')'");
+        return false;
+    }
 }
 
 function parseFraction(input) {
@@ -207,7 +242,7 @@ function getOuterParencesContent(inputStr) {
 }
 
 function elementCheck(element) {
-    console.log('rootElement',element); 
+    // console.log('rootElement',element); 
     //TODO read remaining
    
     let openIndex = element[0].next.indexOf("(");
