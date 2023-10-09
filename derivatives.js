@@ -107,6 +107,7 @@ console.log('list',list);
 
 function calculate(objects) {
     let isAborted = false;
+    let resultArray = [];
     for (let index = 0; !isAborted && index < objects.length; index++) {
         const element = objects[index];
         // console.log('eachElement',element);
@@ -118,9 +119,11 @@ function calculate(objects) {
                         let one = new Decimal(1.0);
                         let sub = coef.minus(one);
                         if (sub.toString() === '1') {
-                            console.log('subProduct1', coef + 'x' );   
+                            console.log('subProduct1', coef + 'x' );
+                            resultArray.push(coef + 'x');   
                         }else{
-                            console.log('subProduct1', coef + 'x^' + sub );
+                            console.log('subProduct1', coef + 'x^' + sub.toString());
+                            resultArray.push(coef + 'x^' + sub.toString());
                         }
                     }else{
                         const indexMinus = index-1;
@@ -131,9 +134,11 @@ function calculate(objects) {
                             let one = new Decimal(1.0);
                             let sub = next.minus(one);
                             if (sub.toString() === '1') {
-                                console.log('subProduct1', coef + 'x' );   
+                                console.log('subProduct1', coef + 'x' );
+                                resultArray.push(coef + 'x');      
                             }else{
-                                console.log('subProduct1', coef + 'x^' + sub );
+                                console.log('subProduct1', coef + 'x^' + sub.toString());
+                                resultArray.push(coef + 'x^' + sub.toString());   
                             }
                         }
                     }
@@ -142,11 +147,13 @@ function calculate(objects) {
             case 'x':
                 if(index==0){
                     console.log('subProduct1', '1' );
+                    resultArray.push('1');
                 }else{
                     const indexMinus = index-1;
                     if (isNumeric(objects[indexMinus].value)) {
                         let previous = new Decimal(objects[indexMinus].value);
                         console.log('subProduct1', previous );
+                        resultArray.push(previous.toString());
                     }
                 }
                 break;
@@ -188,6 +195,9 @@ function calculate(objects) {
             case '(':
                 isAborted = true;
                 break;
+            case '{':
+                isAborted = true;
+                break;
             case 'cosx':
                 if(index==0){
                     console.log('subProduct1', '-sinx' );
@@ -224,19 +234,15 @@ function calculate(objects) {
                 }
                 break;
             case 'frac':
+                console.log('subProduct1', 'frac' );
                 quotientOperation(objects[index].next);
-                if(index==0){
-                    console.log('subProduct1', 'frac' );
-                }else{
-                    console.log('subProduct1', 'frac' );
-                }
                 break;
             default:
                 break;
         }
     }
 
-    
+    return resultArray;
 }
 
 function quotientOperation(inputStr){
@@ -256,48 +262,64 @@ function quotientOperation(inputStr){
     // console.log(ux);
     // console.log(vx); 
     // {'(x^3+5x)^2'}    
-    let counterSub3 = 99;
-    let elementListSub3 = [];
-    let element3 = contents[0];
-    while (counterSub3>0) {
-        let resultSub3 = parser3.parse(element3);
-        element3= resultSub3.next;
-        
-        if(resultSub3.value == "" || resultSub3.next == ""){
-            counterSub3 = -1;
-        }
-        elementListSub3.push(resultSub3);
-        if (counterSub3 === -1) {
-            // elementCalc(elementList);
-            elementListSub3.push({ type: 'EOE', value: 'EOE', next: null });
-        }
-        counterSub3 -= 1;
-    }
-    console.log(elementListSub3);
 
-    let counterSub4 = 99;
-    let elementListSub4 = [];
-    let element4 = contents[1];
-    while (counterSub4>0) {
-        let resultSub4 = parser4.parse(element4);
-        element4= resultSub4.next;
-        
-        if(resultSub4.value == "" || resultSub4.next == ""){
-            counterSub4 = -1;
+    let content3 = getOuterParencesContent(contents[0]);
+    const subsubElements3 = splitStringWithBracketsSub(content3);
+    let elementListSub3 = [];
+    for (let index = 0; index < subsubElements3.length; index++) {
+        let counterSub3 = 99;
+        let element3 = subsubElements3[index];
+        while (counterSub3>0) {
+            let resultSub3 = parser3.parse(element3);
+            element3= resultSub3.next;
+            
+            if(resultSub3.value == "" || resultSub3.next == ""){
+                counterSub3 = -1;
+            }
+            elementListSub3.push(resultSub3);
+            if (counterSub3 === -1) {
+                // elementCalc(elementList);
+                elementListSub3.push({ type: 'EOE', value: 'EOE', next: null });
+            }
+            counterSub3 -= 1;
         }
-        elementListSub4.push(resultSub4);
-        if (counterSub4 === -1) {
-            // elementCalc(elementList);
-            elementListSub4.push({ type: 'EOE', value: 'EOE', next: null });
-        }
-        counterSub4 -= 1;
     }
-    console.log(elementListSub4);
+    // console.log('test',elementListSub3);
+
+    let content4 = getOuterParencesContent(contents[1]);
+    const subsubElements4 = splitStringWithBracketsSub(content4);
+    let elementListSub4 = [];
+    for (let index = 0; index < subsubElements4.length; index++) {
+        let counterSub4 = 99;
+        let element4 = subsubElements4[index];
+        while (counterSub4>0) {
+            let resultSub4 = parser4.parse(element4);
+            element4= resultSub4.next;
+            
+            if(resultSub4.value == "" || resultSub4.next == ""){
+                counterSub4 = -1;
+            }
+            elementListSub4.push(resultSub4);
+            if (counterSub4 === -1) {
+                // elementCalc(elementList);
+                elementListSub4.push({ type: 'EOE', value: 'EOE', next: null });
+            }
+            counterSub4 -= 1;
+        }
+    }
+    // console.log('test',elementListSub4);
+
 
     // check if arg is a polynomial
-    // calculate(elementListSub3);
-    // calculate(elementListSub4);
+    let ux = contents[0];
+    let vx = contents[1];
+    let resu = calculate(elementListSub3);
+    let resv = calculate(elementListSub4);
+    let resuDifStr = (resu.length > 0) ? resu.join('+') : (resu.length === 1) ? resu[0] : '';
+    let resvDifStr = (resv.length > 0) ? resv.join('+') : (resv.length === 1) ? resv[0] : '';
+    let result = 'frac{' + resuDifStr + '*' + vx + '-' + ux + '*' + resvDifStr + '}{(' + vx + ')^2}';
 
+    console.log('fracProduct',result);
 }
 
 function parenthesisCheck(inputStr) {
@@ -369,7 +391,7 @@ function getOuterParencesContent(inputStr) {
         outerContent = inputStr.substring(openIndex + 1, closeIndex);
         // console.log(outerContent);
     } 
-    return outerContent;
+    return outerContent !== '' ? outerContent : inputStr;
 }
 
 function elementCheck(element) {
