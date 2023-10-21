@@ -18,7 +18,7 @@ console.log('inputString',inputString);
 // const separator = /(?=[+-])(?![^{]*})/g;
 const resultArray = splitStringWithBrackets(inputString);
 
-// console.log(resultArray);
+console.log(resultArray);
 // ['-', 
 //'5x^3', 
 //'+', 
@@ -34,6 +34,8 @@ const resultArray = splitStringWithBrackets(inputString);
 //'-', 
 //'4t']
 let list = [];
+let subComponent = '';
+let combinateionRule = true;
 for (let index = 0; index < resultArray.length; index++) {
     let element = resultArray[index];
     const parser = new Parser();
@@ -48,7 +50,6 @@ for (let index = 0; index < resultArray.length; index++) {
         }
         list.push(result);
         elementList.push(result);
-
         if (counter === -1) {
             //this method is fishy
             let subElements = elementCheck(elementList);
@@ -98,11 +99,17 @@ for (let index = 0; index < resultArray.length; index++) {
                 calculate(elementList);
             }
             list.push({ type: 'EOE', value: 'EOE', next: null });
-
         }
+        if (subComponent) {
+            console.log('originalComponent',resultArray[index]);
+            console.log('subComponent',subComponent);   
+        }
+        subComponent = '';
+        combinateionRule = true;
         counter -= 1;
     }
 }
+
 console.log('list',list);
 
 function calculate(objects) {
@@ -110,7 +117,6 @@ function calculate(objects) {
     let resultArray = [];
     for (let index = 0; !isAborted && index < objects.length; index++) {
         const element = objects[index];
-        // console.log('eachElement',element);
         switch (element.type) {
             case 'x^':
                 if (isNumeric(element.next)) {
@@ -121,9 +127,27 @@ function calculate(objects) {
                         if (sub.toString() === '1') {
                             console.log('subProduct1', coef + 'x' );
                             resultArray.push(coef + 'x');   
+                            if (subComponent !== '') {
+                                if (combinateionRule) {
+                                    subComponent += '*';
+                                    combinateionRule = false; 
+                                }else{
+                                    subComponent += '+';   
+                                } 
+                            }
+                            subComponent += coef + 'x';
                         }else{
                             console.log('subProduct1', coef + 'x^' + sub.toString());
                             resultArray.push(coef + 'x^' + sub.toString());
+                            if (subComponent !== '') {
+                                if (combinateionRule) {
+                                    subComponent += '*';
+                                    combinateionRule = false; 
+                                }else{
+                                    subComponent += '+';   
+                                }   
+                            }
+                            subComponent += coef + 'x^' + sub.toString();
                         }
                     }else{
                         const indexMinus = index-1;
@@ -136,9 +160,27 @@ function calculate(objects) {
                             if (sub.toString() === '1') {
                                 console.log('subProduct1', coef + 'x' );
                                 resultArray.push(coef + 'x');      
+                                if (subComponent !== '') {
+                                    if (combinateionRule) {
+                                        subComponent += '*';
+                                        combinateionRule = false; 
+                                    }else{
+                                        subComponent += '+';   
+                                    }   
+                                }
+                                subComponent += coef + 'x';
                             }else{
                                 console.log('subProduct1', coef + 'x^' + sub.toString());
-                                resultArray.push(coef + 'x^' + sub.toString());   
+                                resultArray.push(coef + 'x^' + sub.toString());
+                                if (subComponent !== '') {
+                                    if (combinateionRule) {
+                                        subComponent += '*';
+                                        combinateionRule = false; 
+                                    }else{
+                                        subComponent += '+';   
+                                    }   
+                                }
+                                subComponent += coef + 'x^' + sub.toString();   
                             }
                         }
                     }
@@ -148,47 +190,122 @@ function calculate(objects) {
                 if(index==0){
                     console.log('subProduct1', '1' );
                     resultArray.push('1');
+                    if (subComponent !== '') {
+                        if (combinateionRule) {
+                            subComponent += '*'; 
+                            combinateionRule = false;
+                        }else{
+                            subComponent += '+';   
+                        } 
+                    }
+                    subComponent += '1';
+
                 }else{
                     const indexMinus = index-1;
                     if (isNumeric(objects[indexMinus].value)) {
                         let previous = new Decimal(objects[indexMinus].value);
                         console.log('subProduct1', previous );
                         resultArray.push(previous.toString());
+                        if (subComponent !== '') {
+                            if (combinateionRule) {
+                                subComponent += '*';
+                                combinateionRule = false; 
+                            }else{
+                                subComponent += '+';   
+                            }   
+                        }
+                        subComponent += previous.toString();
                     }
                 }
                 break;
             case 'sqrt':
                 if(index==0){
-                    console.log('subProduct1', '0.5*' + element.next);
+                    console.log('subProduct1', '0.5*' + element.next + '^-0.5');
+                    if (subComponent !== '') {
+                        if (combinateionRule) {
+                            subComponent += '*'; 
+                            combinateionRule = false;
+                        }else{
+                            subComponent += '+';   
+                        } 
+                    }
+                    subComponent += '0.5*' + element.next + '^-0.5';
                 }else{
                     const indexMinus = index-1;
                     if (isNumeric(objects[indexMinus].value)) {
                         let previous = new Decimal(objects[indexMinus].value);
                         let next = new Decimal(0.5);
                         let coef = previous.times(next);
-                        console.log('subProduct1', coef + '*' + element.next);
+                        console.log('subProduct1', coef + '*' + element.next + '^-0.5');
+                        if (subComponent !== '') {
+                            if (combinateionRule) {
+                                subComponent += '*';
+                                combinateionRule = false; 
+                            }else{
+                                subComponent += '+';   
+                            }   
+                        }
+                        subComponent += coef + '*' + element.next + '^-0.5';
                     }
                 }
                 break;
             case 'e^':
                 if(index==0){
                     console.log('subProduct1', 'e^' + element.next);
+                    if (subComponent !== '') {
+                                if (combinateionRule) {
+                                    subComponent += '*'; 
+                                    combinateionRule = false;
+                                }else{
+                                    subComponent += '+';   
+                                } 
+                            }
+                    subComponent += 'e^' + element.next;
                 }else{
                     const indexMinus = index-1;
                     if (isNumeric(objects[indexMinus].value)) {
                         let previous = new Decimal(objects[indexMinus].value);
                         console.log('subProduct1', previous + 'e^' + element.next);
+                        if (subComponent !== '') {
+                            if (combinateionRule) {
+                                subComponent += '*';
+                                combinateionRule = false; 
+                            }else{
+                                subComponent += '+';   
+                            }   
+                        }
+                        subComponent += previous + 'e^' + element.next;
                     }
                 }
                 break;
             case 'ln':
                 if(index==0){
                     console.log('subProduct1', element.next + '^-1');
+                    if (subComponent !== '') {
+                                if (combinateionRule) {
+                                    subComponent += '*'; 
+                                    combinateionRule = false;
+                                }else{
+                                    subComponent += '+';   
+                                } 
+                            }
+                    subComponent += element.next + '^-1';
                 }else{
                     const indexMinus = index-1;
                     if (isNumeric(objects[indexMinus].value)) {
                         let previous = new Decimal(objects[indexMinus].value);
                         console.log('subProduct1', previous + '*' + element.next + '^-1');
+                        if (subComponent !== '') {
+                            if (subComponent !== '') {
+                                if (combinateionRule) {
+                                    subComponent += '*';
+                                    combinateionRule = false; 
+                                }else{
+                                    subComponent += '+';   
+                                }   
+                            }  
+                        }
+                        subComponent += previous + '*' + element.next + '^-1';
                     }
                 }
                 break;
@@ -201,6 +318,15 @@ function calculate(objects) {
             case 'cosx':
                 if(index==0){
                     console.log('subProduct1', '-sinx' );
+                    if (subComponent !== '') {
+                        if (combinateionRule) {
+                            subComponent += '*-';
+                            combinateionRule = false; 
+                        }else{
+                            subComponent += '-';   
+                        }   
+                    }
+                    subComponent += 'sinx';
                 }else{
                     const indexMinus = index-1;
                     if (isNumeric(objects[indexMinus].value)) {
@@ -208,28 +334,73 @@ function calculate(objects) {
                         let next = new Decimal(-1.0);
                         let coef = previous.times(next);
                         console.log('subProduct1', coef + 'sinx' );
+                        if (subComponent !== '') {
+                            if (combinateionRule) {
+                                subComponent += '*-';
+                                combinateionRule = false; 
+                            }else{
+                                subComponent += '-';   
+                            }   
+                        }
+                        subComponent += coef + 'sinx';
                     }
                 }
                 break;
             case 'sinx':
                 if(index==0){
                     console.log('subProduct1', 'cosx' );
+                    if (subComponent !== '') {
+                        if (combinateionRule) {
+                            subComponent += '*';
+                            combinateionRule = false; 
+                        }else{
+                            subComponent += '+';   
+                        } 
+                    }
+                    subComponent += 'cosx';
                 }else{
                     const indexMinus = index-1;
                     if (isNumeric(objects[indexMinus].value)) {
                         let previous = new Decimal(objects[indexMinus].value);
                         console.log('subProduct1', previous + 'cosx' );
+                        if (subComponent !== '') {
+                            if (combinateionRule) {
+                                subComponent += '*';
+                                combinateionRule = false; 
+                            }else{
+                                subComponent += '+';   
+                            }   
+                        }
+                        subComponent += 'cosx';
                     }
                 }
                 break;
             case 'tanx':
                 if(index==0){
                     console.log('subProduct1', '(secx)^2' );
+                    if (subComponent !== '') {
+                        if (combinateionRule) {
+                            subComponent += '*';
+                            combinateionRule = false; 
+                        }else{
+                            subComponent += '+';   
+                        } 
+                    }
+                    subComponent += '(secx)^2';
                 }else{
                     const indexMinus = index-1;
                     if (isNumeric(objects[indexMinus].value)) {
                         let previous = new Decimal(objects[indexMinus].value);
                         console.log('subProduct1', previous + '(secx)^2' );
+                        if (subComponent !== '') {
+                            if (combinateionRule) {
+                                subComponent += '*'; 
+                                combinateionRule = false;
+                            }else{
+                                subComponent += '+';   
+                            } 
+                        }
+                        subComponent += previous + '(secx)^2';
                     }
                 }
                 break;
@@ -320,6 +491,8 @@ function quotientOperation(inputStr){
     let result = 'frac{' + resuDifStr + '*' + vx + '-' + ux + '*' + resvDifStr + '}{(' + vx + ')^2}';
 
     console.log('fracProduct',result);
+    subComponent = '';
+    subComponent += result;
 }
 
 function parenthesisCheck(inputStr) {
