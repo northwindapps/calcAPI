@@ -18,7 +18,7 @@ console.log('inputString',inputString);
 // const separator = /(?=[+-])(?![^{]*})/g;
 const resultArray = splitStringWithBrackets(inputString);
 
-console.log(resultArray);
+// console.log(resultArray);
 // ['-', 
 //'5x^3', 
 //'+', 
@@ -101,8 +101,9 @@ for (let index = 0; index < resultArray.length; index++) {
             list.push({ type: 'EOE', value: 'EOE', next: null });
         }
         if (subComponent) {
-            console.log('originalComponent',resultArray[index]);
+            console.log('beforeReplaced',resultArray[index]);
             console.log('subComponent',subComponent);   
+            resultArray[index] = subComponent;
         }
         subComponent = '';
         combinateionRule = true;
@@ -110,7 +111,9 @@ for (let index = 0; index < resultArray.length; index++) {
     }
 }
 
-console.log('list',list);
+// console.log('list',list);
+console.log('inputString',inputString);
+console.log('resultArray',resultArray);
 
 function calculate(objects) {
     let isAborted = false;
@@ -405,8 +408,16 @@ function calculate(objects) {
                 }
                 break;
             case 'frac':
-                console.log('subProduct1', 'frac' );
-                quotientOperation(objects[index].next);
+                if(index==0){
+                    console.log('subProduct1', 'frac' );
+                    quotientOperation(objects[index].next,'');
+                }else{
+                    const indexMinus = index-1;
+                    if (isNumeric(objects[indexMinus].value)) {
+                        let previous = new Decimal(objects[indexMinus].value);
+                        quotientOperation(objects[index].next,previous.toString());
+                    }
+                }
                 break;
             default:
                 break;
@@ -416,7 +427,7 @@ function calculate(objects) {
     return resultArray;
 }
 
-function quotientOperation(inputStr){
+function quotientOperation(inputStr,coef=''){
 
     // Create a regular expression to match text inside curly braces
     const regex = /\{([^}]*)\}/g;
@@ -488,8 +499,11 @@ function quotientOperation(inputStr){
     let resv = calculate(elementListSub4);
     let resuDifStr = (resu.length > 0) ? resu.join('+') : (resu.length === 1) ? resu[0] : '';
     let resvDifStr = (resv.length > 0) ? resv.join('+') : (resv.length === 1) ? resv[0] : '';
-    let result = 'frac{' + resuDifStr + '*' + vx + '-' + ux + '*' + resvDifStr + '}{(' + vx + ')^2}';
-
+    let result = ''
+    if (coef) {
+        result += coef;
+    }
+    result += 'frac{' + resuDifStr + '*' + vx + '-' + ux + '*' + resvDifStr + '}{(' + vx + ')^2}';
     console.log('fracProduct',result);
     subComponent = '';
     subComponent += result;
