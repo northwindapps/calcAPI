@@ -541,7 +541,7 @@ getOuterParencesContent(inputStr) {
         return (Object.keys(listSub).length === 0) ? false : listSub;
     }
 
-    execute() {
+    execute(expression) {
             // let inputString = 'sqrt(5)-4x^2t-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}';
         // str = 'logd(10*10)+(sqrt(sqrt4 + 2 * (sin60^2 + cos60^2)))*2';
         // str = '(cos45 * sin45)';
@@ -550,11 +550,11 @@ getOuterParencesContent(inputStr) {
         // let result = excecute(str);
         // console.log(result);
         let inputString = 'tanx-x^2-5x^3+sqrt(x^0.75-4x^2+4x)-4x^2*a^(x-3)*y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+5frac{x^2}{x^3+5x}-4t+sinx-4cosx';
-        console.log('inputString',inputString);
+        console.log('inputString',expression);
         // nputString = x^frac{3}{4};
         // inputString = parseFraction(inputString);
         // const separator = /(?=[+-])(?![^{]*})/g;
-        const resultArray = this.splitStringWithBrackets(inputString);
+        const resultArray = this.splitStringWithBrackets(expression);
         const originalArray = Array.from(resultArray);
         // ['-', 
         //'5x^3', 
@@ -655,6 +655,7 @@ getOuterParencesContent(inputStr) {
         console.log('outputArray',originalArray);
         let joined = originalArray.join('');
         let finalResult = joined.replace(/--/g, '+');
+        finalResult = joined.replace(/\+\-/g, '-');
         console.log('inputString',inputString);
         console.log('outputString',finalResult);   
         return finalResult; 

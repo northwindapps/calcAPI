@@ -14,13 +14,14 @@ app.get('/api/v1', (req, res) => {
     res.send('Welcome to calcAPI. If you encounter an error, please let us know it for future improvement. https://northwindsoftware.com');
 });
 
-app.get('/api/defferntiate', (req, res) => {
-    let result = defferentiate.execute();
+// POST route
+app.post('/api/v1/defferentiate', (req, res) => {
+    const data = req.body;
+    console.log(data);
+    let result = defferentiate.execute(data.exp);
     res.status(200).json({ result: result });
 });
 
-
-// POST route
 app.post('/api/v1/execute', (req, res) => {
     const data = req.body;
     console.log(data);
