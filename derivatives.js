@@ -654,8 +654,7 @@ getOuterParencesContent(inputStr) {
         console.log('resultArray',resultArray);
         console.log('outputArray',originalArray);
         let joined = originalArray.join('');
-        let finalResult = joined.replace(/--/g, '+');
-        finalResult = joined.replace(/\+\-/g, '-');
+        let finalResult = joined.replace(/--/g, '+').replace(/\+\-/g, '-');
         console.log('inputString',inputString);
         console.log('outputString',finalResult);   
         return finalResult; 
