@@ -17,8 +17,7 @@ console.log('inputString',inputString);
 // inputString = parseFraction(inputString);
 // const separator = /(?=[+-])(?![^{]*})/g;
 const resultArray = splitStringWithBrackets(inputString);
-
-// console.log(resultArray);
+const originalArray = Array.from(resultArray);
 // ['-', 
 //'5x^3', 
 //'+', 
@@ -102,8 +101,12 @@ for (let index = 0; index < resultArray.length; index++) {
         }
         if (subComponent) {
             console.log('beforeReplaced',resultArray[index]);
-            console.log('subComponent',subComponent);   
-            resultArray[index] = subComponent;
+            var index2 = originalArray.indexOf(resultArray[index]);
+            if (index2 !== -1) {
+                originalArray[index2] = subComponent;
+            } else {
+                console.log("Element not found in the array.");
+            } 
         }
         subComponent = '';
         combinateionRule = true;
@@ -111,9 +114,14 @@ for (let index = 0; index < resultArray.length; index++) {
     }
 }
 
-// console.log('list',list);
-console.log('inputString',inputString);
+// here is the final result
 console.log('resultArray',resultArray);
+console.log('outputArray',originalArray);
+let joined = originalArray.join('');
+let finalResult = joined.replace(/--/g, '+');
+console.log('inputString',inputString);
+console.log('outputString',finalResult);
+
 
 function calculate(objects) {
     let isAborted = false;
