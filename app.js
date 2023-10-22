@@ -3,6 +3,8 @@ const app = express();
 const port = 3000; // Port on which the server will listen
 const {Service} = require('./service');
 const service = new Service();
+const {Defferentiate} = require('./derivatives');
+const defferentiate = new Defferentiate();
 
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
@@ -10,6 +12,11 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 // Define a route
 app.get('/api/v1', (req, res) => {
     res.send('Welcome to calcAPI. If you encounter an error, please let us know it for future improvement. https://northwindsoftware.com');
+});
+
+app.get('/api/defferntiate', (req, res) => {
+    let result = defferentiate.execute();
+    res.status(200).json({ result: result });
 });
 
 
