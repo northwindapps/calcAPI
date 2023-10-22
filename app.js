@@ -3,8 +3,8 @@ const app = express();
 const port = 3000; // Port on which the server will listen
 const {Service} = require('./service');
 const service = new Service();
-const {Defferentiate} = require('./derivatives');
-const defferentiate = new Defferentiate();
+const {Differentiate} = require('./derivatives');
+const differentiate = new Differentiate();
 
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
@@ -15,10 +15,10 @@ app.get('/api/v1', (req, res) => {
 });
 
 // POST route
-app.post('/api/v1/defferentiate', (req, res) => {
+app.post('/api/v1/differentiate', (req, res) => {
     const data = req.body;
     console.log(data);
-    let result = defferentiate.execute(data.exp);
+    let result = differentiate.execute(data.exp);
     res.status(200).json({ result: result });
 });
 

@@ -3,7 +3,7 @@ const Decimal = require('decimal.js');
 const service = new Service();
 const {Parser} = require('./Parser');
 
-class Defferentiate {
+class Differentiate {
 
     static subComponent = '';
     static combinateionRule = true;
@@ -663,5 +663,5 @@ getOuterParencesContent(inputStr) {
 }
 
 module.exports = {
-    Defferentiate,
+    Differentiate,
 };
