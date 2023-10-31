@@ -45,6 +45,21 @@ class Service {
         }
         return input;
     }
+
+    replace_rule(source){
+        var input = source;
+        var pattern = /(\d+)\(/g;
+        input = input.replace(pattern, '$1 *(');
+        return input;
+    }
+
+    replace_rule2(source){
+        var input = source;
+        var pattern = /(\d+)([a-zA-Z]+)/g;
+        // Replace matches in the input string
+        input = input.replace(pattern, '$1 * $2');
+        return input;
+    }
     
     num_check(source){
         var regex = /[^-0123456789.]/g;
@@ -265,7 +280,7 @@ class Service {
                         var c =  a.pow(b);
                         elements[i+1] = c.toString();
                         elements[i-1] = "nil";
-                        elements[i] = "nil";                
+                        elements[i] = "+";                
                     }
                 }
             }else{
@@ -276,7 +291,7 @@ class Service {
                         resultvalue = a.times(b); 
                         elements[i+1] = resultvalue.toString();
                         elements[i-1] = "nil";
-                        elements[i] = "nil";
+                        elements[i] = "+";
                     }
                     
                     if (elements[i] == "/" && this.isFloat(elements[i-1]) && this.isFloat(elements[i+1])){
@@ -291,7 +306,7 @@ class Service {
                             resultvalue = a.dividedBy(b);
                             elements[i+1] = resultvalue.toString();
                             elements[i-1] = "nil";
-                            elements[i] = "nil";
+                            elements[i] = "+";
                         }
                     }
                 }
@@ -331,6 +346,8 @@ class Service {
         
         //PREPARATION
         tempStr = this.replace_constant(tempStr);
+        tempStr = this.replace_rule(tempStr);
+        tempStr = this.replace_rule2(tempStr);
         
         //Comma Free
         tempStr = tempStr.replaceAll(",", "");    
