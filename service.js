@@ -240,7 +240,7 @@ class Service {
             elements = checkings;        
             //MUST NEED
             if (elements.length > 1) {
-                for (let i = 0; i < elements.length; i++){
+                for (let i = 1; i < elements.length; i++){
                     if (this.isFloat(elements[i-1]) && this.isFloat(elements[i])){
                         let a = new Decimal(elements[i-1]);
                         let b = new Decimal(elements[i]);
@@ -258,7 +258,7 @@ class Service {
             
         }else{
             if (elements.includes('^')) {
-                for (let i = 0; i < elements.length; i++) {
+                for (let i = 1; i < elements.length; i++) {
                     if (elements[i] == "^" &&  typeof elements[i-1] !== "undefined" && this.isFloat(elements[i-1]) && typeof elements[i+1] !== "undefined" && this.isFloat(elements[i+1])) {                    
                         let a = new Decimal(elements[i-1]);
                         let b = new Decimal(elements[i+1]);
@@ -269,7 +269,7 @@ class Service {
                     }
                 }
             }else{
-                for (let i = 0; i < elements.length; i++) {
+                for (let i = 1; i < elements.length; i++) {
                     if (elements[i] == "*" && typeof elements[i-1] !== "undefined" && this.isFloat(elements[i-1]) && typeof elements[i+1] !== "undefined" && this.isFloat(elements[i+1])) {
                         let a = new Decimal(elements[i-1])
                         let b = new Decimal(elements[i+1])
@@ -321,8 +321,6 @@ class Service {
         }else if (firstChar === "/"){
             return false;
         }else if (firstChar === "*"){
-            return false;
-        }else if (firstChar === "-"){
             return false;
         }else if (firstChar === "+"){
             return false;
