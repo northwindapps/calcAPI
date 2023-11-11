@@ -45,6 +45,12 @@ class Service {
         }
         return input;
     }
+
+    replace_expression(source){
+        let input = source;
+        input = input.replace(/(\d+)\(/g, '$1*(');
+        return input;
+    }
     
     num_check(source){
         var regex = /[^-0123456789.]/g;
@@ -265,7 +271,7 @@ class Service {
                         var c =  a.pow(b);
                         elements[i+1] = "+";
                         elements[i-1] = "nil";
-                        elements[i] = c.toString();                 
+                        elements[i] = c.toString();                
                     }
                 }
             }else{
@@ -321,7 +327,7 @@ class Service {
         }else if (firstChar === "/"){
             return false;
         }else if (firstChar === "*"){
-            return false;        
+            return false;
         }else if (firstChar === "+"){
             return false;
         }
@@ -331,7 +337,8 @@ class Service {
         
         //PREPARATION
         tempStr = this.replace_constant(tempStr);
-        
+        tempStr = this.replace_expression(tempStr);
+
         //Comma Free
         tempStr = tempStr.replaceAll(",", "");    
         if(!tempStr.includes("(")){
