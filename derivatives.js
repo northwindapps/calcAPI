@@ -24,8 +24,7 @@ console.log(service.basic_operation(str));
 // str = 'sqrt(2)';
 // let result = excecute(str);
 // console.log(result);
-const inputString = '-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2a^(x-3)y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sinx}{cosx}-4t';
-
+const inputString = '-5x^3+sqrt(x^frac{3}{4}-4x^2+4x)-4x^2a^(x-3)y^3-e^(2x^2+3x+5)-10ln(x^3+5x)+frac{sin(x)}{cos(x)}-4t+40e^(sin60x+cos60x)';
 
 // const separator = /(?=[+-])(?![^{]*})/g;
 const resultArray = splitStringWithBrackets(inputString);
@@ -44,14 +43,25 @@ console.log(resultArray);
 //'+', 
 //'frac{sin(x)}{cos(x)}', 
 //'-', 
-//'4t']
-for (let index = 0; index < resultArray.length; index++) {
-    const element = resultArray[index];
+//'4t'
+//+
+//40e^(sin60x+cos(60/4)x+)
+//]
 
-    const parser = new Parser();
-    parser.parse(resultArray[index]);
+for (let i = 0; i < resultArray.length; i++) {
+    var contentInsideOutermostParentheses = extractOutermostParenthesesContent(resultArray[i]);
+    console.log(contentInsideOutermostParentheses);
     
+    const regex = /e\^/;
+    if (regex.test(resultArray[i])) {
+    console.log("The string contains 'e^'.");
+    } else {
+    console.log("The string does not contain 'e^'.");
+    }
 }
+
+
+
 
 function splitStringWithBrackets(inputString) {
     // Use regular expression to split the string
@@ -61,6 +71,17 @@ function splitStringWithBrackets(inputString) {
     const result = parts.filter(part => part.trim() !== "");
     
     return result;
+}
+
+function extractOutermostParenthesesContent(inputString) {
+    const regex = /\(([^()]+)\)/;
+    const match = inputString.match(regex);
+  
+    if (match && match[1]) {
+      return match[1];
+    } else {
+      return null; // No outermost parentheses found
+    }
 }
 
 function excecute(expression) {
