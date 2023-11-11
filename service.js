@@ -321,9 +321,7 @@ class Service {
         }else if (firstChar === "/"){
             return false;
         }else if (firstChar === "*"){
-            return false;
-        }else if (firstChar === "-"){
-            return false;
+            return false;        
         }else if (firstChar === "+"){
             return false;
         }
